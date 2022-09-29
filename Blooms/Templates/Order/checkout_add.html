@@ -1,0 +1,410 @@
+
+{% extends 'User/use_head.html' %}
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'>
+
+{% load static %}
+{% block content %}
+<style>
+	.addressBlocks-base-radioIcon {
+		position: absolute;
+		left: 20px;
+		top: 40px;
+		
+	}
+	.addressBlocks-base-radioIcon {
+		color: #ff3f6c;
+	}
+
+</style>
+   
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row">
+			<div class="col-md-8">			
+				<div class="col-sm-6 col-md-6 col-lg-12 ">
+					{% for message in messages %}
+					<div class="alert alert-danger">
+						{{message}}
+					</div>
+					{% endfor %}
+					<h4><span style="float:left">Select Delivery Address</span>
+						<span style="float:right">
+							<h4>
+								<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary" data-bs-toggle="modal"
+									data-bs-target="#staticBackdrop">
+									ADD NEW ADDRESS
+								</button>
+			
+								<!-- Modal -->
+								<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+									tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="staticBackdropLabel">ADD NEW ADDRESS</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<form action="" Method="post">
+													{% csrf_token %}
+													<div>
+														<div>
+															<h6>CONTACT DETAILS</h6>
+														</div>
+														<div>
+															<input class="form-control form-control-sm" name="first_name"
+																type="text" placeholder="First Name"
+																aria-label=".form-control-sm example">
+															<input class="form-control form-control-sm" name="last_name" type="text"
+																placeholder="Last Name" aria-label=".form-control-sm example">
+															<input class="form-control form-control-sm" name="Phone_number"
+																type="text" placeholder="Phone "
+																aria-label=".form-control-sm example">
+															<input class="form-control form-control-sm" name="email" type="email"
+																placeholder="Email " aria-label=".form-control-sm example">
+			
+														</div>
+														<div>
+															<h6>ADDRESS </h6>
+														</div>
+														<div>
+			
+			
+															<input class="form-control form-control-sm" name="zip" type="text"
+																placeholder="Postcode / ZIP *"
+																aria-label=".form-control-sm example">
+			
+			
+			
+															<input class="form-control form-control-sm" name="add1" type="text"
+																placeholder="Street Address" aria-label=".form-control-sm example">
+															<input class="form-control form-control-sm" name="add2" type="text"
+																placeholder="Appartment, suite, unit etc: (optional)"
+																aria-label=".form-control-sm example">
+															<input class="form-control form-control-sm" name="state" type="text"
+																placeholder="State" aria-label=".form-control-sm example">
+														</div>
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="RadioDefault" value="True"
+																id="flexCheckChecked">
+															<label class="form-check-label form-control-sm" for="flexRadioDefault2">
+																Make this my default address
+															</label>
+														</div>
+													</div>
+											</div>
+			
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-bs-dismiss="modal">Close</button>
+												<input type="submit" class="btn btn-primary" value="ADD ADDRESS">
+			
+											</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</h4>
+						</span>
+					</h4>
+					<br>
+					<br>
+				</div>
+			</div>
+
+		
+
+			{% if addresses %}
+			<div class="col-md-8">
+				<div class="col-sm-6 col-md-6 col-lg-12 ">
+					<div class="accordion " id="accordionPanelsStayOpenExample">
+						{% for x in addresses %}
+						<div class="accordion-item " onclick='abc({{ x.id }})'>
+							<h2 class="accordion-header  " id="panelsStayOpen-heading{{ x.id }}">
+								<a class="accordion-button bg-light" data-bs-toggle="collapse"
+									data-bs-target="#panelsStayOpen-collapse{{ x.id }}" aria-expanded="true"
+									aria-controls="panelsStayOpen-collapse{{ x.id }}">
+									<input class="addressBlocks-base-radioIcon" style="display: inline;" id="ee{{ x.id }}"
+										value='{{ x.id }}' type="radio" name="mk_default">
+			
+									<div class="accordion-body ">
+										<h5><strong>{{x.first_name}} {{x.last_name}}</strong></h5>
+										<p id='y' class="price"><span class="price-sale">{{x.house}},{{x.town}}</span></p>
+										<p class="price"><span class="price-sale">{{x.state}},{{x.zip}}</span></p>
+										<p>Mobile:<strong>{{x.phone_number}}</strong></p>
+			
+									</div>
+								</a>
+							</h2>
+			
+							<div id="panelsStayOpen-collapse{{ x.id }}" class="accordion-collapse collapse "
+								aria-labelledby="panelsStayOpen-heading{{ x.id }}">
+								<div class="accordion-body">
+									<span type="button" class="btn " data-bs-toggle="modal"
+										data-bs-target="#staticBackdrop{{ x.id }}">
+										Edit
+									</span>
+									<a href="{% url 'remove_add' x.id %}" class="btn " >
+										Remove
+									</a>
+			
+									<div class="modal fade" id="staticBackdrop{{ x.id }}" data-bs-backdrop="static"
+										data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+										aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="staticBackdropLabel">EDIT ADDRESS</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal"
+														aria-label="Close"></button>
+												</div>
+												<div class="modal-body">
+													<form action="{% url 'up_address' x.id %}" Method="post">
+														{% csrf_token %}
+														<div>
+															<div>
+																<h6>CONTACT DETAILS</h6>
+															</div>
+															<div>
+																<input type="hidden" name="next" value="{{ request.path }}">
+																<input class="form-control form-control-sm" name="first_name"
+																	type="text" value="{{x.first_name}}" placeholder="First Name"
+																	aria-label=".form-control-sm example">
+																<input class="form-control form-control-sm" name="last_name"
+																	type="text" value="{{x.last_name}}" placeholder="Last Name"
+																	aria-label=".form-control-sm example">
+																<input class="form-control form-control-sm" name="Phone_number"
+																	type="text" placeholder="Phone " value="{{x.phone_number}}"
+																	aria-label=".form-control-sm example">
+																<input class="form-control form-control-sm" name="email"
+																	type="email" placeholder="Email " value="{{x.email}}"
+																	aria-label=".form-control-sm example">
+			
+															</div>
+															<div>
+																<h6>ADDRESS </h6>
+															</div>
+															<div>
+																<input class="form-control form-control-sm" name="zip" type="text"
+																	placeholder="Postcode / ZIP *" value="{{x.zip}}"
+																	aria-label=".form-control-sm example">
+																<input class="form-control form-control-sm" name="add1" type="text"
+																	placeholder="Street Address"  value="{{x.house}}"
+																	aria-label=".form-control-sm example">
+																<input class="form-control form-control-sm" name="add2" type="text"
+																	placeholder="town" value="{{x.town}}"
+																	aria-label=".form-control-sm example">
+																<input class="form-control form-control-sm" value="{{x.state}}" name="state" type="text"
+																	placeholder="State" aria-label=".form-control-sm example">
+															</div>
+															<div class="form-check">
+																<input class="form-check-input" type="radio" name="RadioDefault"
+																	id="flexCheckChecked">
+																<label class="form-check-label form-control-sm"
+																	for="flexRadioDefault2">
+																	Make this my default address
+																</label>
+															</div>
+														</div>
+												</div>
+			
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary"
+														data-bs-dismiss="modal">Close</button>
+													<input type="submit" class="btn btn-primary" value="UPDATE">
+			
+												</div>
+												</form>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+						<br>
+						<br>
+						{% endfor %}
+					</div>
+					<div class="accordion" id="accordionPanelsStayOpenExample">
+						<div class="accordion-item">
+							<a class="accordion-button bg-light" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+								+ADD NEW ADDRESS
+							</a>
+						</div>
+					</div>
+			
+				</div>
+			
+			</div>
+			
+			
+			
+			
+			
+			
+			{% else %}
+			
+
+
+
+
+
+
+
+          <div class="col-xl-8 ftco-animate">
+			<form action="" Method="post" >	
+							{% csrf_token %}
+							<h3 class="mb-4 billing-heading">Billing Details</h3>
+	          	<div class="row align-items-end">
+	          		<div class="col-md-6">
+	                <div class="form-group">
+	                	<label for="firstname">First Name</label>
+	                  <input type="text" name="first_name" {% if ship %}value="{{ship.first_name}}"{% endif %}  class="form-control" placeholder="">
+	                </div>
+	              </div>
+	              <div class="col-md-6">
+	                <div class="form-group">
+	                	<label for="lastname">Last Name</label>
+	                  <input type="text" name="last_name" {% if ship %}value="{{ship.last_name}}"{% endif %}  class="form-control" placeholder="">
+	                </div>
+                </div>
+                <div class="w-100"></div>
+		            <div class="col-md-12">
+		            	<!--<div class="form-group">
+		            		<label for="country">State / Country</label>
+		            		<div class="select-wrap">
+		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+		                  <select name="" id="" class="form-control">
+		                  	<option value="">France</option>
+		                    <option value="">Italy</option>
+		                    <option value="">Philippines</option>
+		                    <option value="">South Korea</option>
+		                    <option value="">Hongkong</option>
+		                    <option value="">Japan</option>
+		                  </select>
+		                </div>
+		            	</div>-->
+		            </div> 
+		            <div class="w-100"></div>
+		            <div class="col-md-6">
+		            	<div class="form-group">
+	                	<label for="streetaddress">Street Address</label>
+	                  <input type="text" name="add1" {% if ship %}value="{{ship.house}}"{% endif %} class="form-control" placeholder="House number and street name">
+	                </div>
+		            </div>
+		            <div class="col-md-6">
+		            	<div class="form-group">
+	                  <input type="text" name="add2" {% if ship %}value="{{ship.town}}"{% endif %} class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
+	                </div>
+		            </div>
+		            <div class="w-100"></div>
+		            <div class="col-md-6">
+		            	<div class="form-group">
+	                	<label for="towncity">State</label>
+	                  <input type="text" name="state"  {% if ship %}value="{{ship.state}}"{% endif %}  class="form-control" placeholder="">
+	                </div>
+		            </div>
+		            <div class="col-md-6">
+		            	<div class="form-group">
+		            		<label for="postcodezip">Postcode / ZIP *</label>
+	                  <input type="text" name="zip"  {% if ship %}value="{{ship.zip}}"{% endif %}  class="form-control" placeholder="">
+	                </div>
+		            </div>
+		            <div class="w-100"></div>
+		            <div class="col-md-6">
+	                <div class="form-group">
+	                	<label for="phone">Phone</label>
+	                  <input type="text" name="Phone_number"  {% if ship %}value="{{ship.phone_number}}"{% endif %}  class="form-control" placeholder="">
+	                </div>
+	              </div>
+	              <div class="col-md-6">
+	                <div class="form-group">
+	                	<label for="emailaddress">Email Address</label>
+	                  <input type="text" name="email"  {% if ship %}value="{{ship.email}}"{% endif %}  class="form-control" placeholder="">
+	                </div>
+                </div>
+                <div class="w-100"></div>
+                <div class="col-md-12">
+                	<div class="form-group mt-4">
+										<div class="radio">
+											{% if z %} 
+											<label><input hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-get="show_addresses"  hx-trigger="click" hx-target="#y" hx-swap="innerHTML"  type="radio" name="optradio"> Ship to different address</label>
+										  {% else %}
+										  <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label>
+										   {% endif %} 
+										</div>
+									</div>
+                </div>
+				
+	            </div>
+			</div>
+	          <!-- END -->
+
+
+			  {% endif %}
+
+
+
+			
+
+	          
+	          	 <div class="col-md-3 ">
+	          		<div class="cart-detail cart-total bg-light p-3 p-md-4">
+	          			<h3 class="billing-heading mb-4">Cart Total</h3>
+	          			<p class="d-flex">
+		    						<span>Subtotal</span>
+		    						<span>₹ &nbsp{{total}}</span>
+		    					</p>
+		    					<p class="d-flex">
+		    						<span>Delivery</span>
+		    						<span>₹ &nbsp 0.00</span>
+		    					</p>
+		    					<p class="d-flex">
+		    						<span>Discount</span>
+		    						<span>₹ &nbsp 0.00</span>
+		    					</p>
+		    					<hr>
+		    					<p class="d-flex total-price">
+		    						<span>Total</span>
+		    						<span>₹ &nbsp{{total}}</span>
+		    					</p>
+								
+									{% if i %}
+									<p>
+										<input type="submit" name="sub" class="btn btn-primary py-3 px-4" value="CONTINUE">
+										</p>
+										{% else %}
+										<p>
+											<form action="{% url 'checkt_pay' %}" method="post">
+												{% csrf_token %} 
+												<input type="hidden" name="addid" id="addid" required>
+												<input type="submit" name="sub" class="btn btn-primary py-3 px-4" value="CONTINUE TO PAY">
+										
+											</form>
+											</p>
+									{% endif %}
+									
+										
+								</div>
+								
+	          		          	
+	          </div> 
+			 
+			</form>
+           <!-- .col-md-8 -->
+        </div>
+      </div>
+    </section> <!-- .section -->
+	<script>
+		function abc(t)
+		{									
+			$('#ee'+t).prop('checked', true);
+			$('#addid').val(t);
+		}
+	</script>
+	{% endblock content %}

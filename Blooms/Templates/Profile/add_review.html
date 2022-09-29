@@ -1,0 +1,51 @@
+{% extends 'Profile/user_layout.html' %}
+			
+			{% block content1 %}
+						  <div class="col-md-12 col-lg-10 order-md-last">				
+				  <div class="row">		
+					<div class="col-md-12">							
+						<div class="col-xl-12 ftco-animate">
+							<form action="" Method="post" >
+								{% csrf_token %}
+								<h3 class="mb-4 billing-heading"> Review</h3>
+					  <div class="row align-items-end">
+						<div class="col-md-10">
+							<div class="form-group">
+								<label for="firstname">Photo</label>
+							  <input type="file" name="img"  class="form-control" placeholder="Image">
+							  <input type="hidden" name="id" value="{{id}}" class="form-control" placeholder="Image">
+							</div>
+						  </div> 
+						<div class="col-md-10">
+							<div class="form-group">
+							<label for="streetaddress"></label>
+						  <input type="text" name="review" class="form-control" placeholder="Add review">
+						</div>
+						</div>
+						
+					<div class="col-md-10">
+						<div  class="form-group">
+							  <input style="background: #ffa45c !important;"  type="submit" name="sub"  class="form-control">
+						</div>
+					</div>
+					<div class="w-100"></div>
+				
+					
+					</div>
+				</div>
+		
+						
+						
+					</div>
+		
+		
+
+				  </div>
+				  <div class="row mt-5">
+				
+			  </div>
+			  </div>
+
+	
+
+			  {% endblock content1 %}

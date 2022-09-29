@@ -1,0 +1,129 @@
+{% extends 'Profile/user_layout.html' %}
+
+
+{% block content1 %}
+<style>
+	.table tbody tr td {
+		text-align: left !important;
+		padding: 15px 40px;
+
+	}
+</style>
+<div class="col-md-8 col-lg-10 order-md-last">
+
+	<table class="table" id="tablecart" style="min-width: 100% !important;">
+
+		<tbody>
+			<tr>
+				<td colspan="2" class="product-name">
+					 <h2 class="heading mb-4">
+					Profile Details
+				</h2>
+					
+				</td>
+				
+			</tr>
+			<tr>
+
+				<td class="product-name">
+					Full Name
+				</td>
+				<td class="product-name">
+					<h3>{{user.first_name}} {{user.last_name}}</h3>
+
+				</td>
+
+			</tr>
+			<tr>
+
+				<td class="product-name">
+					Mobile Number
+				</td>
+				<td class="product-name">
+					<h3>{{user.Phone_number}} </h3>
+
+
+				</td>
+
+			</tr>
+			<tr>
+
+				<td class="product-name">
+					EmailId
+				</td>
+				<td class="product-name">
+					<h3>{{user.username}}</h3>
+
+
+				</td>
+
+			</tr>
+			<tr>
+
+				<td class="product-name">
+					Gender
+				</td>
+				<td class="product-name">
+					<h3>
+					{% if user.gender is None %}
+					- not added - 
+					{% else %}
+					{{user.gender}}
+					{% endif %}
+						
+						 </h3>
+
+
+				</td>
+
+			</tr>
+			<tr>
+
+				<td class="product-name">
+					Date of Birth
+				</td>
+				<td class="product-name">
+					<h3>{% if user.date_of_birth is None %}
+						- not added - 
+						{% else %}
+						{{user.date_of_birth}}
+						{% endif %} </h3>
+
+
+				</td>
+
+			</tr>
+			<tr>
+
+				<td class="product-name">
+					Location
+				</td>
+				<td class="product-name">
+					<h3>{% if user.location is None %}
+						- not added - 
+						{% else %}
+						{{user.location}}
+						{% endif %} </h3>
+				</td>
+			</tr>
+			<tr>
+				<td class="product-name">
+					Alternative Number
+				</td>
+				<td class="product-name">
+					<h3>{% if user.alt_Phone_number is None %}
+						- not added - 
+						{% else %}
+						{{user.alt_Phone_number}}
+						{% endif %} </h3>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<a href="{% url 'profile_up' %}" class="btn btn-info">EDIT</a>
+					</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+{% endblock content1 %}

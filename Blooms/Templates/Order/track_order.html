@@ -1,0 +1,139 @@
+{% extends 'Profile/user_layout.html' %}
+
+{% load mathfilters %}
+{% block content1 %}
+<style>
+	#progressbar {
+		margin-bottom: 30px;
+		overflow: hidden;
+		color: #455A64;
+		padding-left: 0px;
+		margin-top: 30px
+	}
+	
+	#progressbar li {
+		list-style-type: none;
+		font-size: 13px;
+		width: 33.33%;
+		float: left;
+		position: relative;
+		font-weight: 400;
+		color: #455A64 !important;
+		
+	}
+	
+	#progressbar #step1:before {
+		content: "1";
+		color: #fff;
+		width: 29px;
+		margin-left: 15px !important;
+		padding-left: 11px !important;
+	}
+	
+	
+	#progressbar #step2:before {
+		content: "2";
+		color: #fff;
+		width: 29px;
+	
+	}
+	
+	#progressbar #step3:before {
+		content: "3";
+		color: #fff;
+		width: 29px;
+		margin-right: 15px !important;
+		padding-right: 11px !important;
+	}
+	
+	#progressbar li:before {
+		line-height: 29px;
+		display: block;
+		font-size: 12px;
+		background: #455A64 ;
+		border-radius: 50%;
+		margin: auto;
+	}
+	
+	 #progressbar li:after {
+		content: '';
+		width: 121%;
+		height: 2px;
+		background: #455A64;
+		position: absolute;
+		left: 0%;
+		right: 0%;
+		top: 15px;
+		z-index: 10;
+	} 
+	
+	#progressbar li:nth-child(2):after {
+		left: 50%;
+	}
+	
+	#progressbar li:nth-child(1):after {
+		left: 25%;
+		width: 121%;
+	}
+	#progressbar li:nth-child(3):after {
+		left: 25% !important;
+		width: 50% !important;
+	}
+	
+	#progressbar li.active:before,
+	#progressbar li.active:after {
+		background: #4bb8a9; 
+	}
+	
+</style>
+<div class="col-md-8 col-lg-10 order-md-last">
+	<div class="row" style="padding:5% ;">
+		<h3 class="mb-4 billing-heading">Track Order</h3>
+	          
+	</div>
+	
+		<div class="row px-3">
+            <div class="col">
+                <ul id="progressbar" >
+                    <li class="step0 active " id="step1">PLACED</li>
+                    <li class="step0 active text-center" id="step2">SHIPPED</li>
+                    <li class="step0  text-muted text-right" id="step3">DELIVERED</li>
+                </ul>
+            </div>
+        </div>
+	
+	<div class="row" style="padding:5% ;border: .2mm solid #a9a;">
+		{% for x in order_product %}
+		<div class="image-prod">
+			<img src="{{x.product.image1.url}}" width="200px" height="200px" class="img">
+		</div>
+		{% endfor %}
+	</div>
+	<div class="row">
+		<div class="col-md-6 order-md-last" style="padding:5% ;border: .2mm solid #a9a;">
+			<p><strong>Change your delivery</strong> </p>
+			<button class="btn btn-secondary" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+			_="on click call Swal.fire({title: 'Confirm', text:'Do you want to Cancel?'})if result.isConfirmed trigger confirmed"
+			hx-get="../mycancel/{{ order.id }}" hx-trigger="click" hx-target="#y" hx-swap="outerHTML"> Cancel this delivery</button>
+			
+			<p><strong> Shipped with companyname</strong> </p>
+			<p> Track Id:{{order.order_number}}</p>
+		</div>
+		<div class="col-md-6 order-md-last"  style="padding:5% ;border: .2mm solid #a9a;">
+			<p> Bill No:{{order.order_number}}</p>
+			<p>Ordered Date:{{order.created_at}}</p>
+		
+			<p> Delivery Address:{{order.address.first_name}}
+				{{order.address.house}},
+				{{order.address.town}},{{order.address.zip}},{{order.address.state}}</p>
+			<p> Total Amount:{{order.order_total}}</p>
+			<p>Status:<span id="y">{{order.status}}</span> </p>
+		</div>
+		
+	</div>
+
+	
+
+	
+</div>
+{% endblock content1 %}

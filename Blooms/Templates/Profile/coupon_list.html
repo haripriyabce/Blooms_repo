@@ -1,0 +1,46 @@
+{% extends 'Profile/user_layout.html' %}
+
+{% block content1 %}
+
+
+
+
+
+
+<span id="y"></span>
+<div class="col-md-8 col-lg-10 order-md-last">
+	<h5>
+		Coupons</h5>
+	<table class="table" id="tablecart" style="min-width: 100% !important;">
+
+		<tbody>
+			{% for coupon in coupons %}
+
+			<tr class="text-center-1">
+				<td class="product-name">
+					<h3>{{ coupon.discount }}%OFF</h3>
+
+				</td>
+				<td class="product-name">
+					<h3>On minimum purchase of Rs.{{ coupon.min_purchase }}</h3>
+
+				</td>
+				<td class="product-name">
+					<h3>Code: {{ coupon.coupon_code }}</h3>
+
+				</td>
+
+
+				<td class="product-name">
+					<h3>Expiry:{{ coupon.valid_to }}</h3>
+
+				</td>
+			</tr>
+			<!-- END TR-->
+			{% endfor %}
+
+		</tbody>
+	</table>
+</div>
+
+{% endblock content1 %}

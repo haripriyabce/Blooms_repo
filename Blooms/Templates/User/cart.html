@@ -1,0 +1,279 @@
+{% extends 'User/use_head.html' %}
+
+{% load static %}
+{% block content %}
+
+{% load mathfilters %}
+    <style>
+		tr.htmx-swapping td {
+			opacity: 0;
+			transition: opacity 1s ease-out;
+		  }
+	</style>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+   
+<!--<div class="hero-wrap hero-bread" style="background-image: url({% static 'user_se/images/bg_6.jpg' %});">
+	<div class="container">
+		<div class="row no-gutters slider-text align-items-center justify-content-center">
+			<div class="col-md-9 ftco-animate text-center">
+				<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Products</span></p>
+		  <h1 class="mb-0 bread">Collection Products</h1>
+		</div>
+	  </div>
+	</div>
+  </div>-->
+ <div id='y'></div>
+
+<section class="ftco-section ftco-cart">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-9 ftco-animate">
+			<div class="">
+				<table class="table" id="tablecart" style="min-width: 100% !important;">
+					<thead class="thead-primary">
+					  <tr class="text-center">
+						<th>&nbsp;</th>
+						<th>&nbsp;</th>
+						<th>Product</th>
+						<th>Price</th>
+						<th>Quantity</th>
+						<th>Total</th>
+					  </tr>
+					</thead>
+					<tbody  hx-target="closest tr" hx-swap="outerHTML swap:1s">
+						{% for item in cart_items %}
+					  <tr class="text-center-1">
+						<td class="product-remove"><a href="#"><span hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-trigger='confirmed' _="on click call Swal.fire({title: 'Confirm', showCancelButton: true, text:'Do you want to remove?',buttons: true})if result.isConfirmed trigger confirmed" hx-get="delete_cart_product/{{ item.id }}" class="ion-ios-close"></span></a></td>
+								
+						<td class="image-prod">
+						<img src="{{item.product.image1.url}}" class="img">
+						</td>
+						
+						<td class="product-name">
+							<h3>{{item.product.product_name}}</h3>
+							<p>Far far away, behind the word mountains, far from the countries</p>
+						</td>
+						
+						<td class="price">
+							<input id="row-price{{item.id}}" value={{item.product.price}} type="hidden">
+							₹ &nbsp{{item.product.price}}</td>
+						
+						<td class="quantity">
+							<div class="input-group mb-3">
+								<span class="input-group-btn mr-2">
+									<button type="button"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-get="update_cart/{{ item.id }}" hx-include="[name='quantity{{ item.id }}']" hx-trigger="click" onclick="sub({{item.id}})" class="quantity-left-minus btn" data-type="minus"
+										data-field="">
+										<i class="ion-ios-remove"></i>
+									</button>
+								</span>
+								<input type="hidden" id="pro_id"  value="{{item.id}}">
+								{% csrf_token %}
+								<input type="text" id="quantit{{item.id}}" name="quantity{{ item.id }}" class="form-control input-number" 	min="1" max="100" value="{{item.quantity}}">
+								<span class="input-group-btn ml-2">
+									<button type="button" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-get="update_cart/{{ item.id }}" hx-include="[name='quantity{{ item.id }}']" hx-trigger="click"  onclick="add({{item.id}})" class="quantity-right-plus btn" data-type="plus">
+										<i class="ion-ios-add"></i>
+									</button>									
+								</span>
+						  </div>
+					  </td>
+						<input type="hidden" id="row-totall{{item.id}}">
+						<td >₹ &nbsp<span class="total" id="row-total{{item.id}}">{{ item.product.price|mul:item.quantity|floatformat:2}}</span></td>
+					  </tr><!-- END TR-->
+					  {% endfor %}
+					
+					</tbody>
+				  </table>
+			  </div>
+		</div>
+	
+		<div class="col-md-3 mt-5 cart-wrap">
+			<div class="cart-total mb-3">
+				<h3>Cart Totals</h3>
+				<p class="d-flex">
+					<span>Subtotal</span>
+					₹ &nbsp<span id="cart-totalll">0.00</span>
+				</p>
+				<p class="d-flex">
+					<span>Delivery</span>
+					₹ &nbsp<span>0.00</span>
+				</p>
+
+				<p class="d-flex">
+					<span>Discount</span>
+					₹ &nbsp<span>0.00</span>
+				</p>
+				<p class="d-flex">
+					<span>Coupon Discount</span>
+					<input type="hidden" name="perct" id="perct" value="{{dis}}">
+					{% if dis %}
+					₹ &nbsp<span id="cart-disco">0.00</span>
+				
+					{% else %}
+					<span><a style="color:rgb(255, 63, 108);" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+							Use Coupon
+						</a></span>
+					{% endif %}
+				
+				</p>
+				{% if dis %}
+				<p>				<a style="color:rgb(255, 63, 108);" type="button" data-bs-toggle="modal"
+						data-bs-target="#staticBackdrop">
+						Apply Another Coupon
+					</a>				
+				</p>
+				{% endif %}
+				<hr>
+				<p class="d-flex total-price">
+					<span>Total</span>
+					₹ &nbsp<span id="cart-totall2">0.00</span>
+				</p>
+			</div>
+			<p class="text-center"><a href="{% url 'checkt_add' %}" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+			
+
+		<!-- Modal -->
+		<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+			tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="staticBackdropLabel">APPLY COUPON</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<form action="{% url 'apply_coupon'%}" Method="post">
+						{% csrf_token %}
+						<div class="modal-body">
+					
+							<div>
+								<div>
+								<!--<input class="form-control form-control-sm" type='search' name="search">-->
+								</div>
+					
+								<div>
+									<h6>ADDRESS </h6>
+								</div>
+					
+								{% for coupon in coupons %}
+								<div class="shadow-lg p-3 mb-5 bg-body rounded">
+									<div class="form-check">
+										{% if coupon.id == coup_id %}
+										<input class="form-check-input" disabled  type="radio" name="coupon_apply" value="{{ coupon.id }}"
+										id="flexCheckChecked">
+										{% else %}
+										<input class="form-check-input"   type="radio" name="coupon_apply" value="{{ coupon.id }}"
+										id="flexCheckChecked">
+										{% endif %}
+										
+										<label class="form-check-label form-control-sm" for="flexRadioDefault2">
+											<p><strong>Code: {{ coupon.coupon_code }}</strong></p>
+											<p><strong>Save:{{ coupon.discount }}%OFF</strong></p>
+											<p><strong>On minimum purchase of Rs.{{ coupon.min_purchase }}</strong></p>
+											<p><strong>Expires on:{{ coupon.valid_to }}</strong></p>
+					
+										</label>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					
+						<div class="modal-footer">
+					
+							<input type="submit" class="btn btn-primary" style="width:50%;" value="APPLY">
+					
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		
+		</div>
+	</div>
+	</div>
+</section>
+
+<script>
+	
+	function add(id) {		
+		var val =  document.getElementById("quantit"+id).value;
+		val++;
+		document.getElementById("quantit"+id).value=val;
+		var s= val * document.getElementById("row-price"+id).value;
+		
+		document.getElementById("row-totall"+id).value=s;
+		 document.getElementById("row-total"+id).innerHTML=s;
+		 calc_total();
+		
+	}
+	function sub(id) {
+		var val = document.getElementById("quantit"+id).value;
+		if (val > 1) {
+			val--;
+			document.getElementById("quantit"+id).value = val;	
+			var s= val * document.getElementById("row-price"+id).value;
+		
+		 document.getElementById("row-total"+id).innerHTML=s;	
+		 calc_total();	
+		}
+		}
+		function calc_total(){
+			var sum = 0;
+			$(".total").each(function(){
+			  sum += parseFloat($(this).text());
+			});
+			$('#cart-totalll').text(sum);
+			var disc=$('#perct').val();
+			var discount=0.00;
+			if (disc!=''){
+				discount=(sum*disc)/100;
+				//alert($('#perct').val())	
+				sum-=discount;			
+			}		
+			$('#cart-disco').text(discount);  
+			$('#cart-totall2').text(sum);   			  
+		}
+		$(document).ready(function(){
+			calc_total();
+	
+			$('#tablecart').on('click', '.ion-ios-close', function (e) {
+				e.preventDefault();
+				$(this).closest('tr').remove();
+				calc_total();	
+			});
+	
+		});
+</script>
+  
+<script>
+	
+</script>
+<script>
+	/*function callaj(id,val)
+	{
+		alert("jjjk");
+		var token = $('input[name=csrfmiddlewaretoken]').val();
+	  data: {
+		  'product_id':id,
+		  'quantity': val,
+		 
+	  },	
+	
+		$.ajax({
+			method: "POST",
+			{% comment %} url: '{% url "update_cart" %}', {% endcomment %}
+			data : data ,
+			success: function (response) {
+					alertify.success(response.status)
+
+			}
+		})
+	}*/
+</script>
+<script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
+    
+	{% endblock content %}
+	
+	

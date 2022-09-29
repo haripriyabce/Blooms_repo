@@ -1,0 +1,62 @@
+{% extends 'Admin/header.html' %}
+{% load static %}
+    {% block content %}
+<main role="main" class="main-content">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <h2 class="page-title">Content</h2>
+          <!-- .card -->
+          <!-- .card -->
+          <a href="{% url 'coupon_list' %}" style="width:150px;"> <button type="button" class="btn btn-warning btn-block mb-4" style="width:100%;" >Back</button></a>
+   
+          <div class="card my-4">
+            <div class="card-header">
+              <strong>Content</strong>
+            </div>
+            <div class="card-body">
+              <form method="post" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>
+                               
+                  <section>
+                    <div class="form-group">
+                      <label for="userName">Coupon code</label>
+                      <input id="userName" name="coupon_code" value="{{coupon.coupon_code}}" type="text" class="form-control required">
+                    </div>
+                    <div class="form-group">
+                      <label for="userName">Offer in percentage (%)</label>
+                      <input id="userName" name="discount" value="{{coupon.discount}}" type="text" class="form-control required">
+                    </div>
+                    <div class="form-group">
+                      <label for="userName">Valid from</label>
+                      <input  name="valid_from" type="date" value="{{coupon.valid_from}}" class="form-control required">
+                    </div>
+                    <div class="form-group">
+                      <label for="userName">Valid till</label>
+                      <input  name="valid_till" type="date" value="{{coupon.valid_till}}" class="form-control required">
+                    </div>
+                    <div class="form-group">
+                      <label for="userName">Minimum Purchase</label>
+                      <input  name="min_purchase" type="text" value="{{coupon.min_purchase}}" class="form-control required">
+                    </div>
+                               
+                    <input type="submit" class="btn mb-2 btn-info" value="Save">
+                  
+                    <input type="Reset" class="btn mb-2 btn-secondary">
+                    <div class="help-text text-muted">(*) Mandatory</div>
+
+                  </section>
+                
+                  
+                </div>
+              </form>
+            </div> <!-- .card-body -->
+          </div> <!-- .card -->
+        </div> <!-- .col-12 -->
+      </div> <!-- .row -->
+    </div> <!-- .container-fluid -->
+   
+    
+  </main>
+  {% endblock content %}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+<style> 
+@page{
+  size : "A4";
+  margin : 2.5cm  1.5cm  3.5cm 1.5cm;
+    @top-center {
+        content : "Best Buy";
+    }
+
+    @bottom-right{
+        content: "Page" counter(page)" of "counter(pages); 
+    }
+    }
+
+</style>
+
+
+
+</head>
+<body>
+    
+
+<h2>Sales Report</h2>
+<table class="table">
+    <thead class="thead">
+
+        <tr>
+            <th>No :</th>
+            <th>Bill No</th>
+                  <th>Ordered Date</th>
+                  <th>Payment Method</th>
+                  <th>Delivery Address</th>
+                  <th>Total Amount</th>  
+                
+
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for sales in salesreport %}
+        <tr>
+            <td>{{forloop.counter}}</td>      
+             
+            <td>{{sales.order_number}}</td>
+            <td>{{sales.created_at}}</td>
+            <td>{{sales.payment.payment_method}}</td>
+            <td>{{sales.address.first_name}} 
+                   
+                {{sales.address.house}},
+                {{sales.address.town}},{{sales.address.zip}},{{sales.address.state}}</td>
+                <td>{{sales.order_total}}</td>
+                
+                
+        </tr>
+        {% endfor %}
+        <br>
+        <tr>
+            <td>Total</td>
+            <td>{{total}}</td>
+           
+        </tr>
+
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,678 @@
+{% extends 'Admin/header.html' %}
+  {% load static %}
+    {% block content %}
+          <main role="main" class="main-content">
+      <div class="container-fluid">
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawChart1);
+          google.charts.setOnLoadCallback(drawChart);
+          function drawChart1() {
+            var data = google.visualization.arrayToDataTable([
+              ['Year', 'Sales', 'Expenses'],
+              ['2013',  1000,      400],
+              ['2014',  1170,      460],
+              ['2015',  660,       1120],
+              ['2016',  1030,      540]
+            ]);
+    
+            var options = {
+              title: 'Company Performance',
+              hAxis: {title: 'Year',  titleTextStyle: {color: '#999'}},
+              vAxis: {minValue: 0}
+            };
+    
+            var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+          }
+      
+        
+              function drawChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Order Status');
+                data.addColumn('number', 'Count');
+                data.addRows([
+                  {% for pay in order_status_count %}
+                [ '{{ pay.status}}', {{ pay.status_count}}],
+                {% endfor %}  
+                ]);
+        
+                var data_pay = new google.visualization.DataTable();
+                data_pay.addColumn('string', 'Payment Method');
+                data_pay.addColumn('number', 'Count');
+                data_pay.addRows([
+                  {% for pay in payment_method_count %}
+                  [ '{{ pay.payment__payment_method}}', {{ pay.payment_method_count}}],
+                  {% endfor %}  
+                ]);
+                
+                var bardata = new google.visualization.DataTable();
+                bardata.addColumn('string', 'Product name');
+                bardata.addColumn('number', 'Quantity');
+                bardata.addRows([
+                  {% for top in top_products %}
+                  [ '{{ top.product_name }}', {{ top.quantity_sum}}],
+                  {% endfor %}  
+                ]);
+
+               
+        
+                var piechart_options = {title:'Pie Chart: Status of Orders ',pieHole: 0.4,
+                width:495,
+                height:300};
+                var piechart = new google.visualization.PieChart(document.getElementById('donutchart'));
+                piechart.draw(data, piechart_options);
+
+
+                var piechart_options = {title:'Pie Chart: Payment methods of Orders ',
+                               width:495,
+                               height:300};
+                var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+                piechart.draw(data_pay, piechart_options);
+        
+                var barchart_options = {title:'Barchart: Top selling Product',
+                               width:495,
+                               height:300,
+                               legend: 'none'};
+                var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+                barchart.draw(bardata, barchart_options);
+              }
+            </script>
+         
+            <!--Table and divs that hold the pie charts-->
+            <table class="columns">
+              <tr>
+               
+                <td>
+                  
+                  
+                  </td>
+                <td></td>
+              </tr>
+            </table>
+          
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="row justify-content-center">
+          <div class="col-12">
+
+            <div class="row align-items-center mb-2">
+              <div class="col">
+                <h2 class="h5 page-title">Welcome!</h2>
+                <div class="card shadow mb-4">
+               <!--<div id="chart_div" style="width: 100%; height: 500px;"></div>
+              --> 
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card shadow mb-4">
+                
+                <div id="donutchart" style="border: 1px solid #ccc"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card shadow mb-4">
+                <div id="barchart_div" style="border: 1px solid #ccc"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card shadow mb-4">
+                <div id="piechart_div" style="border: 1px solid #ccc"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card shadow mb-4">
+                <div id="barchart_div" style="border: 1px solid #ccc"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row align-items-center mb-2">
+              
+
+              <div class="col-auto">
+                <form class="form-inline">
+                  <div class="form-group d-none d-lg-inline">
+                    <label for="reportrange" class="sr-only">Date Ranges</label>
+                    <div id="reportrange" class="px-2 py-2 text-muted">
+                      <span class="small"></span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button type="button" class="btn btn-sm"><span class="fe fe-refresh-ccw fe-16 text-muted"></span></button>
+                    <button type="button" class="btn btn-sm mr-2"><span class="fe fe-filter fe-16 text-muted"></span></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- widgets -->
+            <div class="row my-4">
+              <div class="col-md-4">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <small class="text-muted mb-1">Order count</small>
+                        <h3 class="card-title mb-0">{{order_count}}</h3>
+                        <p class="small text-muted mb-0"><span class="fe fe-arrow-down fe-12 text-danger"></span><span>-18.9% Last week</span></p>
+                      </div>
+                      <div class="col-4 text-right">
+                        <span class="sparkline inlineline"></span>
+                      </div>
+                    </div> <!-- /. row -->
+                  </div> <!-- /. card-body -->
+                </div> <!-- /. card -->
+              </div> <!-- /. col -->
+              <div class="col-md-4">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <small class="text-muted mb-1">Completed order</small>
+                        <h3 class="card-title mb-0">{{completed_order}}</h3>
+                        <p class="small text-muted mb-0"><span class="fe fe-arrow-up fe-12 text-warning"></span><span>+1.9% Last week</span></p>
+                      </div>
+                      <div class="col-4 text-right">
+                        <span class="sparkline inlinepie"></span>
+                      </div>
+                    </div> <!-- /. row -->
+                  </div> <!-- /. card-body -->
+                </div> <!-- /. card -->
+              </div> <!-- /. col -->
+              <div class="col-md-4">
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <small class="text-muted mb-1">Pending order</small>
+                        <h3 class="card-title mb-0">{{pending_order}}</h3>
+                        <p class="small text-muted mb-0"><span class="fe fe-arrow-up fe-12 text-success"></span><span>37.7% Last week</span></p>
+                      </div>
+                      <div class="col-4 text-right">
+                        <span class="sparkline inlinebar"></span>
+                      </div>
+                    </div> <!-- /. row -->
+                  </div> <!-- /. card-body -->
+                </div> <!-- /. card -->
+              </div> <!-- /. col -->
+            </div> <!-- end section -->
+            <!-- linechart -->
+            <div class="my-4">
+              <div id="lineChart"></div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card shadow mb-4">
+                  <div class="card-header">
+                    <strong class="card-title">Top selling Product</strong>
+                    <a class="float-right small text-muted" href="#!">View all</a>
+                  </div>
+                  <div class="card-body">
+                    <div class="list-group list-group-flush my-n3">
+                     
+                      {% for top in top_products %}
+                      <div class="list-group-item">
+                        <div class="row align-items-center">
+                          <div class="col">
+                            {{ top.product_name }}
+                          </div>
+                          <div class="col">
+                            <strong>{{ top.quantity_sum}}</strong>
+                            <div class="my-0 text-muted small"></div>
+                          </div>
+                          <div class="col-auto">
+                            <strong>{{ top.price }}</strong>
+                            <div class="progress mt-2" style="height: 4px;">
+
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+
+                     
+                     
+                    </div> <!-- / .list-group -->
+                  </div> <!-- / .card-body -->
+                </div> <!-- .card -->
+              </div> <!-- .col -->
+              <div class="col-md-6">
+                <div class="card shadow mb-4">
+                  <div class="card-header">
+                    <strong class="card-title">Recent orders</strong>
+                    <a class="float-right small text-muted" href="#!">View all</a>
+                  </div>
+                  <div class="card-body">
+                    <div class="list-group list-group-flush my-n3">
+                     
+                      {% for recent in recent_order %}
+                      <div class="list-group-item">
+                        <div class="row align-items-center">
+                          <div class="col">
+                            {{ recent.address.first_name }} {{ recent.address.house}}
+                          </div>
+                          <div class="col">
+                            <strong>{{ recent.status}}</strong>
+                            <div class="my-0 text-muted small">{{ recent.created_at }}</div>
+                          </div>
+                          <div class="col-auto">
+                            <strong>{{ recent.order_total }}</strong>
+                            <div class="progress mt-2" style="height: 4px;">
+
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+
+                     
+                     
+                    </div> <!-- / .list-group -->
+                  </div> <!-- / .card-body -->
+                </div> <!-- .card -->
+              </div> <!-- .col -->
+            </div> <!-- .row -->
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card shadow mb-4">
+                  <div class="card-header">
+                    <strong class="card-title">Payment Method</strong>
+                    <a class="float-right small text-muted" href="#!">View all</a>
+                  </div>
+                  <div class="card-body">
+                    <div class="list-group list-group-flush my-n3">
+                     
+                      {% for pay in payment_method_count %}
+                      <div class="list-group-item">
+                        <div class="row align-items-center">
+                          <div class="col">
+                            <strong>{{ pay.payment__payment_method}}</strong>
+                          
+                          </div>
+                          <div class="col">
+                            <strong>{{ pay.payment_method_count}}</strong>
+                            <div class="my-0 text-muted small"></div>
+                          </div>
+                          <div class="col-auto">
+                            <strong>rrwr</strong>
+                            <div class="progress mt-2" style="height: 4px;">
+
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+
+                     
+                     
+                    </div> <!-- / .list-group -->
+                  </div> <!-- / .card-body -->
+                </div> <!-- .card -->
+              </div> <!-- .col -->
+              <div class="col-md-6">
+                <div class="card shadow mb-4">
+                  <div class="card-header">
+                    <strong class="card-title">Recent orders</strong>
+                    <a class="float-right small text-muted" href="#!">View all</a>
+                  </div>
+                  <div class="card-body">
+                    <div class="list-group list-group-flush my-n3">
+                     
+                      {% for recent in recent_order %}
+                      <div class="list-group-item">
+                        <div class="row align-items-center">
+                          <div class="col">
+                            {{ recent.address.first_name }} {{ recent.address.house}}
+                          </div>
+                          <div class="col">
+                            <strong>{{ recent.status}}</strong>
+                            <div class="my-0 text-muted small">{{ recent.created_at }}</div>
+                          </div>
+                          <div class="col-auto">
+                            <strong>{{ recent.order_total }}</strong>
+                            <div class="progress mt-2" style="height: 4px;">
+
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      {% endfor %}
+
+                     
+                     
+                    </div> <!-- / .list-group -->
+                  </div> <!-- / .card-body -->
+                </div> <!-- .card -->
+              </div> <!-- .col -->
+            </div> <!-- .row -->
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card shadow eq-card  mb-4">
+                  <div class="card-header">
+                    <strong>Region</strong>
+                  </div>
+                  <div class="card-body">
+                    <div class="map-box my-5" style="position:relative; max-width: 320px; max-height: 200px; margin:0 auto;">
+                      <div id="dataMapUSA"></div>
+                    </div>
+                    <div class="row align-items-bottom my-2">
+                      <div class="col">
+                        <p class="mb-0">France</p>
+                        <span class="my-0 text-muted small">+10%</span>
+                      </div>
+                      <div class="col-auto text-right">
+                        <p class="mb-0">118</p>
+                        <div class="progress mt-2" style="height: 4px;">
+                          <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row align-items-center my-2">
+                      <div class="col">
+                        <p class="mb-0">Netherlands</p>
+                        <span class="my-0 text-muted small">+0.6%</span>
+                      </div>
+                      <div class="col-auto text-right">
+                        <p class="mb-0">1008</p>
+                        <div class="progress mt-2" style="height: 4px;">
+                          <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row align-items-center my-2">
+                      <div class="col">
+                        <p class="mb-0">Italy</p>
+                        <span class="my-0 text-muted small">+1.6%</span>
+                      </div>
+                      <div class="col-auto text-right">
+                        <p class="mb-0">67</p>
+                        <div class="progress mt-2" style="height: 4px;">
+                          <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row align-items-center my-2">
+                      <div class="col">
+                        <p class="mb-0">Spain</p>
+                        <span class="my-0 text-muted small">+118%</span>
+                      </div>
+                      <div class="col-auto text-right">
+                        <p class="mb-0">186</p>
+                        <div class="progress mt-2" style="height: 4px;">
+                          <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- .col -->
+              <div class="col-md-4">
+                <div class="card shadow eq-card mb-4">
+                  <div class="card-header">
+                    <strong class="card-title">Traffic</strong>
+                    <a class="float-right small text-muted" href="#!">View all</a>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart-box mb-3" style="min-height:180px;">
+                      <div id="customAngle"></div>
+                    </div> <!-- .col -->
+                    <div class="mx-auto">
+                      <div class="row align-items-center mb-2">
+                        <div class="col">
+                          <p class="mb-0">Direct</p>
+                          <span class="my-0 text-muted small">+10%</span>
+                        </div>
+                        <div class="col-auto text-right">
+                          <p class="mb-0">218</p>
+                          <span class="dot dot-md bg-success"></span>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-2">
+                        <div class="col">
+                          <p class="mb-0">Organic Search</p>
+                          <span class="my-0 text-muted small">+0.6%</span>
+                        </div>
+                        <div class="col-auto text-right">
+                          <p class="mb-0">1002</p>
+                          <span class="dot dot-md bg-warning"></span>
+                        </div>
+                      </div>
+                      <div class="row align-items-center mb-2">
+                        <div class="col">
+                          <p class="mb-0">Referral</p>
+                          <span class="my-0 text-muted small">+1.6%</span>
+                        </div>
+                        <div class="col-auto text-right">
+                          <p class="mb-0">67</p>
+                          <span class="dot dot-md bg-primary"></span>
+                        </div>
+                      </div>
+                      <div class="row align-items-center">
+                        <div class="col">
+                          <p class="mb-0">Social</p>
+                          <span class="my-0 text-muted small">+118%</span>
+                        </div>
+                        <div class="col-auto text-right">
+                          <p class="mb-0">386</p>
+                          <span class="dot dot-md bg-secondary"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div> <!-- .card-body -->
+                </div> <!-- .card -->
+              </div> <!-- .col-md -->
+              <div class="col-md-4">
+                <div class="card shadow eq-card mb-4">
+                  <div class="card-header">
+                    <strong>Browsers</strong>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart-box mt-3 mb-5">
+                      <div id="radarChartWidget"></div>
+                    </div> <!-- .col -->
+                    <div class="mx-auto">
+                      <div class="row align-items-center my-2">
+                        <div class="col-6 col-xl-3 my-3">
+                          <span class="mb-0">Safari</span>
+                          <div class="progress my-2" style="height: 4px;">
+                            <div class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                        <div class="col-6 col-xl-3 my-3 text-right">
+                          <span>118</span><br />
+                          <span class="my-0 text-muted small">+10%</span>
+                        </div>
+                        <div class="col-6 col-xl-3 my-3">
+                          <span class="mb-0">Chrome</span>
+                          <div class="progress my-2" style="height: 4px;">
+                            <div class="progress-bar" role="progressbar" style="width: 36%" aria-valuenow="36" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                        <div class="col-6 col-xl-3 my-3 text-right">
+                          <span>1008</span><br />
+                          <span class="my-0 text-muted small">+36%</span>
+                        </div>
+                        <div class="col-6 col-xl-3 my-3">
+                          <span class="mb-0">Opera</span>
+                          <div class="progress my-2" style="height: 4px;">
+                            <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                        <div class="col-6 col-xl-3 my-3 text-right">
+                          <span>67</span><br />
+                          <span class="my-0 text-muted small">+1.6%</span>
+                        </div>
+                        <div class="col-6 col-xl-3 my-3">
+                          <span class="mb-0">Edge</span>
+                          <div class="progress my-2" style="height: 4px;">
+                            <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                        <div class="col-6 col-xl-3 my-3 text-right">
+                          <span>186</span><br />
+                          <span class="my-0 text-muted small">+118%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div> <!-- .card-body -->
+                </div> <!-- .card -->
+              </div> <!-- .col -->
+            </div>
+          </div> <!-- /.col -->
+        </div> <!-- .row -->
+      </div> <!-- .container-fluid -->
+      <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="list-group list-group-flush my-n3">
+                <div class="list-group-item bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      <span class="fe fe-box fe-24"></span>
+                    </div>
+                    <div class="col">
+                      <small><strong>Package has uploaded successfull</strong></small>
+                      <div class="my-0 text-muted small">Package is zipped and uploaded</div>
+                      <small class="badge badge-pill badge-light text-muted">1m ago</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="list-group-item bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      <span class="fe fe-download fe-24"></span>
+                    </div>
+                    <div class="col">
+                      <small><strong>Widgets are updated successfull</strong></small>
+                      <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
+                      <small class="badge badge-pill badge-light text-muted">2m ago</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="list-group-item bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      <span class="fe fe-inbox fe-24"></span>
+                    </div>
+                    <div class="col">
+                      <small><strong>Notifications have been sent</strong></small>
+                      <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
+                      <small class="badge badge-pill badge-light text-muted">30m ago</small>
+                    </div>
+                  </div> <!-- / .row -->
+                </div>
+                <div class="list-group-item bg-transparent">
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      <span class="fe fe-link fe-24"></span>
+                    </div>
+                    <div class="col">
+                      <small><strong>Link was attached to menu</strong></small>
+                      <div class="my-0 text-muted small">New layout has been attached to the menu</div>
+                      <small class="badge badge-pill badge-light text-muted">1h ago</small>
+                    </div>
+                  </div>
+                </div> <!-- / .row -->
+              </div> <!-- / .list-group -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Clear All</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body px-5">
+              <div class="row align-items-center">
+                <div class="col-6 text-center">
+                  <div class="squircle bg-success justify-content-center">
+                    <i class="fe fe-cpu fe-32 align-self-center text-white"></i>
+                  </div>
+                  <p>Control area</p>
+                </div>
+                <div class="col-6 text-center">
+                  <div class="squircle bg-primary justify-content-center">
+                    <i class="fe fe-activity fe-32 align-self-center text-white"></i>
+                  </div>
+                  <p>Activity</p>
+                </div>
+              </div>
+              <div class="row align-items-center">
+                <div class="col-6 text-center">
+                  <div class="squircle bg-primary justify-content-center">
+                    <i class="fe fe-droplet fe-32 align-self-center text-white"></i>
+                  </div>
+                  <p>Droplet</p>
+                </div>
+                <div class="col-6 text-center">
+                  <div class="squircle bg-primary justify-content-center">
+                    <i class="fe fe-upload-cloud fe-32 align-self-center text-white"></i>
+                  </div>
+                  <p>Upload</p>
+                </div>
+              </div>
+              <div class="row align-items-center">
+                <div class="col-6 text-center">
+                  <div class="squircle bg-primary justify-content-center">
+                    <i class="fe fe-users fe-32 align-self-center text-white"></i>
+                  </div>
+                  <p>Users</p>
+                </div>
+                <div class="col-6 text-center">
+                  <div class="squircle bg-primary justify-content-center">
+                    <i class="fe fe-settings fe-32 align-self-center text-white"></i>
+                  </div>
+                  <p>Settings</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    {% endblock content %}

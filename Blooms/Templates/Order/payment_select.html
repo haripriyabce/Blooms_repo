@@ -1,0 +1,116 @@
+{% extends 'User/use_head.html' %}
+{% load static %}
+{% block content %}
+
+<!--<div class="hero-wrap hero-bread" style="background-image: url({% static 'user_se/images/bg_6.jpg'%});">
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+          <div class="col-md-9 ftco-animate text-center">
+          	<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Checkout</span></p>
+            <h1 class="mb-0 bread">Checkout</h1>
+          </div>
+        </div>
+      </div>
+    </div>-->
+
+<section class="ftco-section">
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-xl-6 ftco-animate">				
+					
+					<!-- END -->
+					<div class="row mt-5 pt-3 d-flex">
+
+						<div class="col-md-12">
+							<div class="cart-detail bg-light p-3 p-md-4">
+								<h3 class="billing-heading mb-4">Click on Payment Method</h3>
+								<div class="form-group">
+									<div class="col-md-12">
+										<a href="{% url 'cash_on_delivery'%}"><button class="btn btn-primary py-3 px-4 " style=" width:100%;">Cash on Delivery</button></a>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-12">
+
+										<form action="{% url 'pay_success'%}" method="POST">
+											{% csrf_token %} 
+											
+								 	<script
+												src="https://checkout.razorpay.com/v1/checkout.js"
+												data-key="{{api_key}}" 												
+												data-order_id="{{order_id}}"
+												data-buttontext="Pay with Razorpay"
+												data-name="Blooms Corp"
+												data-description="Flower Shop"
+												data-image="https://example.com/your_logo.jpg"
+												data-prefill.name="{{name}}"
+												data-prefill.email="{{email}}"
+												data-prefill.contact="{{phno}}"
+												data-theme.color="#F37254" 
+											></script> 
+											
+											</form>
+
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-md-12">
+
+										<script
+											src="https://www.paypal.com/sdk/js?client-id=AaaKI2zwX_xdHRzzApMStpcBQ-zVQLN1MihpCZLUiuQvb1baOtsa-eY9A8eFWg4DG4LuYqxQOrb1g1Oj&currency=USD"></script>
+										<!-- Set up a container element for the button -->
+										<div id="paypal-button-container"></div>
+										<script>
+											var url = '{% url 'paypal_success' %}'
+											paypal.Buttons({
+												createOrder: (data, actions) => {
+													return actions.order.create({
+														purchase_units: [{
+															amount: {
+																value: '{{total}}' // Can also reference a variable or function
+															}
+														}]
+													});
+												},
+												// Finalize the transaction after payer approval
+												onApprove: (data, actions) => {
+													return actions.order.capture().then(function (orderData) {
+														// Successful capture! For dev/demo purposes:
+														console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+														const transaction = orderData.purchase_units[0].payments.captures[0];
+
+
+														//alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+														// When ready to go live, remove the alert and show a success message within this page. For example:
+														// const element = document.getElementById('paypal-button-container');
+														// element.innerHTML = '<h3>Thank you for your payment!</h3>';
+														 //actions.redirect( url);
+														 window.location.href = url;
+													});
+												}
+											}).render('#paypal-button-container');
+										</script>
+
+
+
+									</div>
+								</div>
+								
+								<!--<p><input type="submit" name="" class="btn btn-primary py-3 px-4" value="Place an order">
+										</p>-->
+							</div>
+						</div>
+					</div>
+		
+			</div> <!-- .col-md-8 -->
+		</div>
+	</div>
+</section> <!-- .section -->
+<script>
+	$(document).ready(function(){
+	 
+		$(".razorpay-payment-button").addClass("btn btn-primary");
+	  
+	});
+	</script>
+{% endblock content %}

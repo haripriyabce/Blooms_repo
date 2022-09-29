@@ -1,0 +1,132 @@
+{% extends 'Profile/user_layout.html' %}
+{% block content1 %}
+
+<style>
+	.table tbody tr td {
+		text-align: left !important;
+		padding: 10px 60px;
+	}
+	.table tbody tr td.product-name {
+		width: auto; 
+	}
+</style>
+<div class="col-md-8 col-lg-10 order-md-last">
+	<table class="table" id="tablecart" style="min-width: 100% !important;">
+
+		<tbody>
+			<tr>
+				<td colspan="2" class="product-name">
+					 <h2 class="heading mb-4">
+					Profile Details
+				</h2>
+					
+				</td>
+				
+			</tr>
+			<form action="" method="post">
+				{% csrf_token %}
+			<tr>
+				<td class="product-name">
+					Full Name
+				</td>
+				<td class="product-name">
+					
+						<input style="display:inline ;width: 49%;" type="text" class="form-control "
+							value="{{user.first_name}}" name="first_name" placeholder="Your First Name">
+						<input type="text" style="display:inline ;width: 49%;" class="form-control "
+							value="{{user.last_name}}" name="last_name" placeholder="Your Last Name">
+				</td>
+			</tr>
+			<tr>
+				<td class="product-name">
+					Mobile Number
+				</td>
+				<td class="product-name">
+					<input type="text" class="form-control" value="{{user.Phone_number}}" name="Phone_number"
+						placeholder="Enter mobile number">
+
+				</td>
+			</tr>
+			<tr>
+
+				<td class="product-name">
+					EmailId
+				</td>
+				<td class="product-name">
+					<input type="email" name="email" value="{{user.username}}" class="form-control"
+						placeholder="Your Email">
+				</td>
+			</tr>
+			<tr>
+
+				<td class="product-name">
+					Gender
+				</td>
+				<td class="product-name">	
+					 
+						
+					<input type="radio" value="Female" 					
+					  name="gender">Female
+					  
+					<input type="radio" value="Male" 
+					
+					 name="gender">Male
+									</td>
+			</tr>
+			<tr>
+				<td class="product-name">
+					Date of Birth
+				</td>
+				<td class="product-name">
+					<input type="date" name="dob" class="form-control" value="{{user.date_of_birth|date:'Y-m-d'}}"
+						placeholder="Your Date of Birth">
+				</td>
+			</tr>
+			<tr>
+				<td class="product-name">
+					Location
+				</td>
+				<td class="product-name">
+					<input type="text" name="location" class="form-control" value="{{user.location}}"
+						placeholder="Your Location">
+				</td>
+			</tr>
+
+			<tr>
+
+				<td class="product-name">
+					Alternative Number
+				</td>
+				<td class="product-name">
+					<input type="text" name="phno2" class="form-control" value="{{user.alt_Phone_number}}"
+						placeholder="Your Alternative Number">
+
+
+				</td>
+
+			</tr>
+			<tr>
+
+				<td colspan="2">
+					
+					<input type="submit" class="btn btn-info" name="sub" value="SAVE">
+
+				</td>
+
+			</tr>
+		</form>
+		<tr>
+
+			<td colspan="2">
+				<a href="{% url 'change_password' %}" class="btn btn-primary" >CHANGE PASSWORD</a>
+			
+				
+			</td>
+
+		</tr>
+		
+		</tbody>
+	</table>
+</div>
+<!-- Button trigger modal -->
+{% endblock content1 %}

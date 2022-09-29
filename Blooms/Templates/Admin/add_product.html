@@ -1,0 +1,98 @@
+{% extends 'Admin/header.html' %}
+{% load static %}
+{% block content %}
+<main role="main" class="main-content">
+  <div class="container-fluid">
+
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <h2 class="page-title">Add Product</h2>
+        <div class="card-deck">
+          <div class="card shadow mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card shadow mb-4">
+                    <a href="{% url 'products' %}"> <button type="button" style="float:right;"
+                        class=" col-md-2 btn btn-primary btn-block ">Back</button></a>
+                    <div class="card-body">
+                      <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-row">
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label for="inputCity">Product Name</label>
+                              <input type="text" name="product_name" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="inputState">Slug</label>
+                              <input type="text" name="slug" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="inputState">Price</label>
+                              <input type="text" name="price" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="inputState">Stock</label>
+                              <input type="text" name="stock" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label for="multi-select2">Category & Subcategory</label>
+                              <select class="form-control" name="subcat"  multiple>
+                                
+                                {% for x in categories %}
+                                <optgroup label="{{ x.category_name }}">
+                                  {% for y in subcategories %}
+                                  {% if y.category_id == x.id %}
+                                  <option value="{{ y.id }}">{{ y.subcategory_name }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                                </optgroup>
+                                {% endfor %}
+                              </select>
+                            </div>
+                            {% for x in categories %}
+                            <div class="form-group col-md-12">
+                              <label for="inputState">{{ x.category_name }}</label>
+                              <br>
+                              {% for y in subcategories %}
+                              {% if y.category_id == x.id %}
+                              <input type="checkbox" name="subcat" value="{{ y.id }}" >{{ y.subcategory_name }}
+                              {% endif %}
+                                  {% endfor %}
+                            </div>
+                            {% endfor %}
+                            <div class="form-group col-md-12">
+                              <label for="inputAddress2">Description</label>
+                              <input type="text" name="description" required class="form-control"
+                                placeholder="Apartment, studio, or floor">
+                            </div>
+                            <div class="form-group col-md-12">
+                              <label for="inputState">Image1</label>
+                              <input type="file" name="image1" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                              <label for="inputState">Image2</label>
+                              <input type="file" name="image2" class="form-control" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                              <label for="inputState">Image3</label>
+                              <input type="file" name="image3" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                              <button type="submit" class="btn btn-primary">ADD</button>
+                            </div>
+                          </div>
+                      </form>
+                    </div> <!-- /. card-body -->
+                  </div> <!-- /. card -->
+                </div> <!-- /. col -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</main> <!-- main -->
+
+{% endblock content %}

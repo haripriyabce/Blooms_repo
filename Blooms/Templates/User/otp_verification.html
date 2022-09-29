@@ -1,0 +1,45 @@
+{% extends 'User/plain_head.html' %}
+{% load static %}
+{% block content %}
+                 
+                        
+          <form method="POST" action="{% url 'otp_verification' phone_number %}?name={{user_name}}" class="bg-white p-5 contact-form">
+            <h6>Please enter the one time password <br> to verify your number</h6>
+            <div> 
+                <span>A code has been sent to</span> 
+                <small>{{ phone_number }}</small> 
+                {% for message in messages %}
+                <div class="alert alert-success" >
+               
+                  {{message}}
+                  
+                 </div>
+                {% endfor %}
+              </div>
+            
+              <div class="col-md-12 text-center p-5" style="padding:auto ;!important">
+                <img src="{% static 'images/imag/logoo.png' %}" class="img-fluid" height="100px" width="150px">
+                  <!-- <img src="{% static 'ims/' %}{{x.image1}}">-->
+              </div>
+
+            {% csrf_token %}
+            <div class="form-group">
+              <div id="otp" class="inputs d-flex flex-row  mt-2" ">
+                <input class="m-1 text-center form-control rounded" style="width:40px;" type="text" name="first" id="first" maxlength="1" /> 
+                <input class="m-1 text-center form-control rounded"  style="width:40px;" type="text" name="second" id="second" maxlength="1" /> 
+                <input class="m-1 text-center form-control rounded"  style="width:40px;" type="text" name="third" id="third" maxlength="1" /> 
+                <input class="m-1 text-center form-control rounded"  style="width:40px;" type="text" name="fourth" id="fourth" maxlength="1" /> 
+              </div> 
+             </div>             
+            <div class="form-group">
+              <input type="submit" value="SignUp" class="btn btn-primary py-3 px-5">
+            </div>
+            <div class="card-2"> 
+              <div class="content d-flex justify-content-center align-items-center mt-3"> 
+                  <span >Didn't get the code ?</span> 
+                  <a href="#" class="text-decoration-none  text-primary">&nbsp Resend(1/3)</a> 
+              </div>
+          </div>
+          </form>
+   
+  {% endblock content %}

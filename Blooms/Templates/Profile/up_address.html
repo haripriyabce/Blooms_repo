@@ -1,0 +1,80 @@
+{% extends 'Profile/user_layout.html' %}
+			
+			{% block content1 %}
+						  <div class="col-md-12 col-lg-10 order-md-last">				
+				  <div class="row">		
+					<div class="col-md-12">							
+						<div class="col-xl-12 ftco-animate">
+							<form action="" Method="post" >
+								{% csrf_token %}
+								<h3 class="mb-4 billing-heading">{% if ship %}Edit {% else %} ADD {% endif %} Address</h3>
+					  <div class="row align-items-end">
+						<div class="col-md-10">
+							<div class="form-group">
+								<label for="firstname">Name</label>
+							  <input type="text" name="first_name" {% if ship %}value="{{ship.first_name}}"{% endif %}  class="form-control" placeholder="">
+							</div>
+						  </div> 
+						<div class="col-md-10">
+							<div class="form-group">
+							<label for="streetaddress">Street Address</label>
+						  <input type="text" name="add1" value="{{ship.house}}" class="form-control" placeholder="House number and street name">
+						</div>
+						</div>
+						<div class="col-md-10">
+							<div class="form-group">
+						  <input type="text" name="add2" {% if ship %}value="{{ship.town}}"{% endif %} class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
+						</div>
+						</div>
+						<div class="w-100"></div>
+						<div class="col-md-10">
+							<div class="form-group">
+							<label for="towncity">State</label>
+						  <input type="text" name="state"  {% if ship %}value="{{ship.state}}"{% endif %}  class="form-control" placeholder="">
+						</div>
+						</div>
+						<div class="col-md-10">
+							<div class="form-group">
+								<label for="postcodezip">Postcode / ZIP *</label>
+						  <input type="text" name="zip"  {% if ship %}value="{{ship.zip}}"{% endif %}  class="form-control" placeholder="">
+						</div>
+						</div>
+						<div class="w-100"></div>
+						<div class="col-md-10">
+						<div class="form-group">
+							<label for="phone">Phone</label>
+						  <input type="text" name="Phone_number"  {% if ship %}value="{{ship.phone_number}}"{% endif %}  class="form-control" placeholder="">
+						</div>
+					  </div>
+					  <div class="col-md-10">
+						<div class="form-group">
+							<label for="emailaddress">Email Address</label>
+						  <input type="text" name="email"  {% if ship %}value="{{ship.email}}"{% endif %}  class="form-control" placeholder="">
+						</div>
+					</div>
+					<div class="col-md-10">
+						<div  class="form-group">
+							  <input style="background: #ffa45c !important;"  type="submit" name="sub"  {% if ship %} value="UPDATE" {% else %} value="ADD" {% endif %}class="form-control">
+						</div>
+					</div>
+					<div class="w-100"></div>
+				
+					
+					</div>
+				</div>
+		
+						
+						
+					</div>
+		
+		
+
+				  </div>
+				  <div class="row mt-5">
+				
+			  </div>
+			  </div>
+
+	
+
+			  {% endblock content1 %}

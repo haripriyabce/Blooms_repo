@@ -1,0 +1,126 @@
+{% extends 'Profile/user_layout.html' %}
+
+{% block content1 %}
+
+
+
+<div class="col-md-8 col-lg-10 order-md-last">
+	<div class="row">
+		<div class="row">
+			<h5 style="float:left"><span>
+					<a href="{% url 'add_address' %}">Add new address</a></span></h5>
+			<br>
+			<br>
+
+		</div>
+
+		<div class="col-sm-6 col-md-6 col-lg-12 ftco-animate">
+
+			<div class="product">
+				<h5>
+					DEFAULT ADDRESS</h5>
+				<a href="{% url 'det' d_address.id %}" class="img-prod">
+					<!-- <span class="status">30%</span>-->
+					<div class="overlay"></div>
+				</a>
+				<div class="text py-3 px-3">
+					<div class="d-flex">
+						<div class="pricing">
+							</span></p>
+							<p class="price">
+								<span class="price-sale">
+									{{d_address.first_name}}</span>
+							</p>
+							<p class="price"><span class="price-sale">{{d_address.house}}</span></p>
+							<p id='y' class="price"><span class="price-sale">{{d_address.town}}</span></p>
+
+							<p class="price"><span class="price-sale">{{d_address.state}}</span></p>
+							<p class="price"><span class="price-sale">{{d_address.zip}}</span></p>
+
+
+							</span></p>
+							<p class="price">
+								<span class="price-sale">
+									{{d_address.phone_number}}</span>
+							</p>
+
+							<span class="col-md-6"><a href="{% url 'up_address' d_address.id %}">Edit</a></span>
+
+						</div>
+						<div class="rating">
+							<p class="text-right">
+								<a href="#"><span class="ion-ios-close-circle"></span></a>
+
+							</p>
+						</div>
+
+					</div>
+
+					<!--<span style='font-size:100px;'>&#9829;</span>#BLACK HEART-->
+
+				</div>
+			</div>
+		</div>
+		<h5 style="float:right"><span>
+				OTHER ADDRESSES</span></h5>
+		{% for x in addresses %}
+		<div class="col-sm-6 col-md-6 col-lg-12 ftco-animate">
+			<div class="product">
+				<a href="{% url 'det' x.id %}" class="img-prod">
+					<!-- <span class="status">30%</span>-->
+					<div class="overlay"></div>
+				</a>
+				<div class="text py-3 px-3">
+					<div class="d-flex">
+						<div class="pricing">
+							</span></p>
+							<p class="price">
+								<span class="price-sale">
+									{{x.first_name}}</span>
+							</p>
+							<p class="price"><span class="price-sale">{{x.house}}</span></p>
+							<p id='y' class="price"><span class="price-sale">{{x.town}}</span></p>
+
+							<p class="price"><span class="price-sale">{{x.state}}</span></p>
+							<p class="price"><span class="price-sale">{{x.zip}}</span></p>
+
+
+							</span></p>
+							<p class="price">
+								<!--<span class="mr-2 price-dc">{{x.price}}</span>-->
+								<span class="price-sale">
+									{{x.phone_number}}</span>
+							</p>
+
+							<span class="col-md-6"><a href="{% url 'up_address' x.id %}">Edit</a></span>
+							<a href="#"><span hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+									_="on click call Swal.fire({title: 'Confirm', text:'Do you want to make it default?',buttons: true})if result.isConfirmed trigger confirmed"
+									hx-get="make_default/{{ x.id }}" hx-trigger="click" hx-target="#y"
+									hx-swap="innerHTML">Make Default</span></a>
+
+						</div>
+						<div class="rating">
+							<p class="text-right">
+								<a href="#"><span class="ion-ios-close-circle"></span></a>
+
+							</p>
+						</div>
+
+					</div>
+
+					<!--<span style='font-size:100px;'>&#9829;</span>#BLACK HEART-->
+
+				</div>
+			</div>
+		</div>
+
+		{% endfor %}
+
+
+	</div>
+	<div class="row mt-5">
+
+	</div>
+</div>
+
+{% endblock content1 %}

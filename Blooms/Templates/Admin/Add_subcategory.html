@@ -1,0 +1,63 @@
+{% extends 'Admin/header.html' %}
+
+    {% block content %}
+<main role="main" class="main-content">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <h2 class="page-title">Subcategory</h2>
+          <!-- .card -->
+          <!-- .card -->
+          <div class="card my-4">
+            <div class="card-header">
+              <strong>Subcategory</strong>
+            </div>
+            <div class="card-body">
+              <form method="post" action="" >
+                {% csrf_token %}
+                <div>
+                            
+                  <section>
+                    <div class="form-group">
+                      <label for="userName">SubCategory Name *</label>
+                      <input id="userName" name="name" type="text" class="form-control required">
+                    </div>
+                    <div class="form-group">
+                      <label for="userName">Category Name *</label>
+                    
+                      <select name="category" class="form-control required">
+                        <option value="">Select Category</option> 
+                        {% for x in categories %}
+                        
+                      
+                        <option value="{{x.id}}">{{x.category_name}}</option> 
+                        {% endfor %}
+                          
+
+                      </select>
+                    </div>
+                    <div class="form-group">
+                     
+                        <label for="example-textarea">Description </label>
+                        <textarea name="description" class="form-control" id="example-textarea" rows="4"> </textarea>
+                      
+                    </div>
+                   
+                    <input type="submit" class="btn mb-2 btn-info" value="Save">
+                  
+                    <input type="Reset" class="btn mb-2 btn-secondary">
+                    <div class="help-text text-muted">(*) Mandatory</div>
+
+                  </section>
+                 
+                </div>
+              </form>
+            </div> <!-- .card-body -->
+          </div> <!-- .card -->
+        </div> <!-- .col-12 -->
+      </div> <!-- .row -->
+    </div> <!-- .container-fluid -->
+   
+    
+  </main>
+  {% endblock content %}

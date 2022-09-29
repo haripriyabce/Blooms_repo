@@ -1,0 +1,54 @@
+{% extends 'Profile/user_layout.html' %}
+			
+			{% block content1 %}
+			<span id="y"></span>	
+			  <div class="col-md-8 col-lg-10 order-md-last">
+				<h5 >
+					MY WISHLIST</h5>
+				<table class="table" id="tablecart" style="min-width: 100% !important;">
+						<thead class="thead-primary">
+						  <tr class="text-center">							
+							
+							  <th></th>
+							  <th>Name</th>
+							  <th>Price</th>
+							 
+							  
+						  </tr>
+						</thead>
+						<tbody>
+							{% for item in wishlistitem %}
+
+						  <tr class="text-center-1">							
+							
+							<td class="product-remove">
+						
+							
+								<a href="#"><span hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' 	_="on click call Swal.fire({title: 'Confirm',  text:'Do you want to remove?',buttons: true})if result.isConfirmed trigger confirmed"
+									hx-get="wishlist_remove/{{ item.product.id }}"  hx-trigger="click" hx-target="#y" hx-swap="innerHTML"  class="ion-ios-close"></span></a></td>
+							
+							<td class="image-prod">
+							<img src="{{item.product.image1.url}}" class="img">
+							</td>
+							
+							<td class="product-name">
+								<h3>{{item.product.product_name}}</h3>
+								<p>Far far away, behind the word mountains, far from the countries</p>
+							</td>
+							
+							<td class="price">
+								<input id="row-price{{item.id}}" value={{item.product.price}} type="hidden">
+								₹ &nbsp{{item.product.price}}</td>
+															
+						  </tr>
+						   
+						  
+						  <!-- END TR-->
+						  {% endfor %}
+						
+						</tbody>
+					  </table>
+				  </div>					 
+				 
+
+{% endblock content1 %}

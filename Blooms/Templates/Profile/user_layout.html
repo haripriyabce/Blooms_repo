@@ -1,0 +1,42 @@
+{% extends 'User/use_head.html' %}
+
+{% load static %}
+{% block content %}    
+   
+
+
+  <section class="ftco-section bg-light">
+	  <div class="container">		
+		  <div class="row">	
+			{% block content1 %}
+    
+    {% endblock content1 %}
+			
+			
+			  <div class="col-md-4 col-lg-2 sidebar">
+				  <div class="sidebar-box-2">
+					  <h2 class="heading mb-4"><a href="#">Profile</a></h2>
+					  <ul>
+						  <li><a href="#"></a></li>
+							  <li><a href="{% url 'myorders' %}">My Orders</a></li>
+							  <li><a href="{% url 'myprofile' %}">Profile</a></li>
+							  <li><a href="{% url 'myaddresses' %}">My Addresses</a></li>
+							  <li><a href="#">Referrence</a></li>
+							  <li><a href="{% url 'coupons' %}">Coupons</a></li>
+							 
+					  </ul>
+				  </div>
+				 
+				  
+					 
+			  </div>
+		  </div>
+	  </div>
+  </section>
+
+  
+  <script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
+
+	{% endblock content %}
+	
+	

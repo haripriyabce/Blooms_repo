@@ -1,0 +1,305 @@
+{% extends 'User/use_head.html' %}
+
+{% load static %}
+{% block content %}
+
+
+<style>
+	.slideshow-items {
+		width: 500px;
+	}
+
+	.slideshow-thumbnails {
+		width: 100px;
+	}
+
+	#slideshow-items-container {
+		display: inline-block;
+		position: relative;
+	}
+
+	#lens {
+		background-color: rgba(233, 233, 233, 0.4)
+	}
+
+	#lens,
+	#result {
+		position: absolute;
+		display: none;
+		z-index: 80;
+	}
+
+	.slideshow-items {
+		display: none;
+	}
+
+	.slideshow-items.active {
+		display: block;
+	}
+
+	.slideshow-thumbnails {
+		opacity: 0.5;
+	}
+
+	.slideshow-thumbnails.active {
+		opacity: 1;
+	}
+
+	#lens,
+	.slideshow-items,
+	.slideshow-thumbnails,
+	#result {
+		border: solid var(--light-grey-2) 10px;
+	}
+</style>
+
+
+
+
+<section class="ftco-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 mb-5 ftco-animate">
+				<div id='lens'>
+				</div>
+
+				<div id='slideshow-items-container'>
+
+					<img class='slideshow-items active' src="{% static 'ims/' %}{{pro.image1}}">
+					<img class='slideshow-items' src="{% static 'ims/' %}{{pro.image2}}">
+					<img class='slideshow-items' src="{% static 'ims/' %}{{pro.image3}}">
+
+				</div>
+
+				<div id='result'></div>
+
+				<div class='row'>
+					<img class='slideshow-thumbnails active' src="{% static 'ims/' %}{{pro.image1}}">
+					<img class='slideshow-thumbnails' src="{% static 'ims/' %}{{pro.image2}}">
+					<img class='slideshow-thumbnails' src="{% static 'ims/' %}{{pro.image3}}">
+				</div>
+
+			</div>
+			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
+				<h3>{{pro.product_name}}</h3>
+				<div class="rating d-flex">
+					<p class="text-left mr-4">
+						<a href="#" class="mr-2">5.0</a>
+						<a href="#"><span class="ion-ios-star-outline"></span></a>
+						<a href="#"><span class="ion-ios-star-outline"></span></a>
+						<a href="#"><span class="ion-ios-star-outline"></span></a>
+						<a href="#"><span class="ion-ios-star-outline"></span></a>
+						<a href="#"><span class="ion-ios-star-outline"></span></a>
+					</p>
+					<p class="text-left mr-4">
+						<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>
+					</p>
+					<p class="text-left">
+						<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
+					</p>
+				</div>
+				<p class="price"><span>₹ &nbsp{{pro.price}}</span></p>
+				<p>{{pro.description}}</p>
+				<div class="row mt-4">
+					<div class="col-md-6">
+						<div class="form-group d-flex">
+							<div class="select-wrap">
+								<div class="icon"><span class="ion-ios-arrow-down"></span></div>
+								<select name="" id="" class="form-control">
+									<option value="">Bundle</option>
+									<option value="">Stem</option>
+
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="w-100"></div>
+					<div class="input-group col-md-6 d-flex mb-3">
+						<span class="input-group-btn mr-2">
+							<button type="button"  class="quantity-left-minus btn" data-type="minus"
+								data-field="">
+								<i class="ion-ios-remove"></i>
+							</button>
+						</span>
+						<input type="text" id="quantit" name="quantity" class="form-control input-number" value="1"
+							min="1" max="100">
+						<span class="input-group-btn ml-2">
+							<button type="button" class="quantity-right-plus btn" data-type="plus"
+								data-field="">
+								<i class="ion-ios-add"></i>
+							</button>
+						
+						</span>
+					</div>
+					<div class="w-100"></div>
+					<div class="col-md-12">
+						<p style="color: #000;">80 stem available</p>
+					</div>
+				</div>
+				<form action="{% url 'add_cart' %}" method="post" >
+					{% csrf_token %}
+					<input type="hidden" name="idd" value="{{pro.id}}" >
+					<input type="hidden" id="qu" min="1" name="qu"value=1 >
+			
+					<p><input type="submit" name="submit" value="Add to Cart"  class="btn btn-black py-3 px-5" ></p>
+			
+				</form>
+				
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="ftco-section bg-light">
+	<div class="container">
+		<div class="row justify-content-center mb-3 pb-3">
+			<div class="col-md-12 heading-section text-center ftco-animate">
+				<h2 class="mb-4">Related Products</h2>
+				<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			{% for x in products %}
+			<div class="col-sm-6 col-md-6 col-lg-4 ftco-animate">
+				<div class="product">
+					<a href="{% url 'det' x.id %}" class="img-prod"><img class="img-fluid"
+							src="{% static 'ims/' %}{{x.image1}}" alt="Colorlib Template">
+						<span class="status">30%</span>
+						<div class="overlay"></div>
+					</a>
+					<div class="text py-3 px-3">
+						<h3><a href="#">{{x.product_name}}</a></h3>
+						<div class="d-flex">
+							<div class="pricing">
+								<p class="price"><span class="mr-2 price-dc">{{x.price}}</span><span
+										class="price-sale">$80.00</span></p>
+							</div>
+							<div class="rating">
+								<p class="text-right">
+									<a href="#"><span class="ion-ios-star-outline"></span></a>
+									<a href="#"><span class="ion-ios-star-outline"></span></a>
+									<a href="#"><span class="ion-ios-star-outline"></span></a>
+									<a href="#"><span class="ion-ios-star-outline"></span></a>
+									<a href="#"><span class="ion-ios-star-outline"></span></a>
+								</p>
+							</div>
+						</div>
+						<p class="bottom-area d-flex px-3">
+							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i
+										class="ion-ios-add ml-1"></i></span></a>
+							<a href="#" class="buy-now text-center py-2">Buy now<span><i
+										class="ion-ios-cart ml-1"></i></span></a>
+						</p>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+
+		</div>
+	</div>
+</section>
+<script>
+	$(document).ready(function(){
+
+		var quantitiy=0;
+		   $('.quantity-right-plus').click(function(e){
+				
+				// Stop acting like a button
+				e.preventDefault();
+				// Get the field name
+				var quantity = parseInt($('#quantit').val());
+				
+				// If is not undefined
+				
+					$('#quantit').val(quantity + 1);
+					$('#qu').val(quantity + 1);
+				  
+					// Increment
+				
+			});
+	
+			 $('.quantity-left-minus').click(function(e){
+				e.preventDefault();
+				var quantity = parseInt($('#quantit').val());
+				
+					if(quantity>0){
+					$('#quantit').val(quantity - 1);
+					$('#qu').val(quantity - 1);
+					}
+				
+			});
+		});								
+</script>
+<script>
+
+
+	$(document).ready(function () {
+
+		$('.slideshow-thumbnails').hover(function () { changeSlide($(this)); });
+
+		$(document).mousemove(function (e) {
+			var x = e.clientX;
+
+			var y = e.clientY;
+			console.log(y);
+			var imgx1 = $('.slideshow-items.active').offset().left;
+
+			var imgx2 = $('.slideshow-items.active').outerWidth() + imgx1;
+
+			var imgy1 = $('.slideshow-items.active').offset().top;
+			var imgy2 = $('.slideshow-items.active').outerHeight() + imgy1;
+
+			if (x > imgx1 && x < imgx2 && y > imgy1 && y < imgy2) {
+				$('#lens').show(); $('#result').show();
+				imageZoom($('.slideshow-items.active'), $('#result'), $('#lens'));
+			} else {
+				$('#lens').hide(); $('#result').hide();
+			}
+
+		});
+
+	});
+
+	function imageZoom(img, result, lens) {
+
+		result.width(img.innerWidth()); result.height(img.innerHeight());
+		lens.width(img.innerWidth() / 2); lens.height(img.innerHeight() / 2);
+
+		result.offset({ top: img.offset().top, left: img.offset().left + img.outerWidth() + 10 });
+
+		var cx = img.innerWidth() / lens.innerWidth(); var cy = img.innerHeight() / lens.innerHeight();
+
+		result.css('backgroundImage', 'url(' + img.attr('src') + ')');
+		result.css('backgroundSize', img.width() * cx + 'px ' + img.height() * cy + 'px');
+
+		lens.mousemove(function (e) { moveLens(e); });
+		img.mousemove(function (e) { moveLens(e); });
+		lens.on('touchmove', function () { moveLens(); })
+		img.on('touchmove', function () { moveLens(); })
+
+		function moveLens(e) {
+			var x = e.clientX - lens.outerWidth() / 2;
+			var y = e.clientY - lens.outerHeight() / 2;
+			if (x > img.outerWidth() + img.offset().left - lens.outerWidth()) { x = img.outerWidth() + img.offset().left - lens.outerWidth(); }
+			if (x < img.offset().left) { x = img.offset().left; }
+			if (y > img.outerHeight() + img.offset().top - lens.outerHeight()) { y = img.outerHeight() + img.offset().top - lens.outerHeight(); }
+			if (y < img.offset().top) { y = img.offset().top; }
+			lens.offset({ top: y, left: x });
+			result.css('backgroundPosition', '-' + (x - img.offset().left) * cx + 'px -' + (y - img.offset().top) * cy + 'px');
+		}
+	}
+
+
+	function changeSlide(elm) {
+		$('.slideshow-items').removeClass('active');
+		$('.slideshow-items').eq(elm.index()).addClass('active');
+		$('.slideshow-thumbnails').removeClass('active');
+		$('.slideshow-thumbnails').eq(elm.index()).addClass('active');
+	}
+
+</script>
+
+
+{% endblock content %}

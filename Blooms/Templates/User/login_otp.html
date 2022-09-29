@@ -1,0 +1,30 @@
+{% extends 'User/plain_head.html' %}
+{% load static %}
+{% block content %}
+         
+                <form action="{% url 'login_otp' %}"  method="post" class="bg-white p-5 contact-form"> 
+                   {% for message in messages %}
+                   <div class="alert alert-success" >               
+                    {{message}}                    
+                   </div>        
+                   {% endfor %}  
+                   <div class="col-md-12 text-center p-5" style="padding:auto ;!important">
+                    <img src="{% static 'images/imag/logoo.png' %}" class="img-fluid" height="100px" width="150px">
+                      <!-- <img src="{% static 'ims/' %}{{x.image1}}">-->
+                  </div>
+            {% csrf_token %}
+            <div class="form-group">
+              <input type="text" class="form-control" name="otp" placeholder="Your OTP">
+              <input type="hidden" class="form-control" name="usern" value="{{ user_name }}" placeholder="Your OTP">
+            </div>
+           
+            
+            <div class="form-group">
+              <input type="submit" value="Login" class="btn btn-primary py-3 px-5">
+            </div>
+
+            <span >Didn't get the code ?</span> 
+            <a href="#" class="text-decoration-none  text-primary">&nbsp Resend(1/3)</a> 
+          </form>
+        
+  {% endblock content %}

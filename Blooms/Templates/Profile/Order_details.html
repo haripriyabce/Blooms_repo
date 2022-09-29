@@ -1,0 +1,80 @@
+{% extends 'Profile/user_layout.html' %}
+
+{% load mathfilters %}
+{% block content1 %}
+<div class="col-md-8 col-lg-10 order-md-last">
+	<p> Bill No:{{order.order_number}}</p>
+	<p>Ordered Date:{{order.created_at}}</p>
+
+	<p> Delivery Address:{{order.address.first_name}}
+
+		{{order.address.house}},
+		{{order.address.town}},{{order.address.zip}},{{order.address.state}}</p>
+	<p> Total Amount:{{order.order_total}}</p>
+	<p>Status:<span id="y">{{order.status}}</span> </p>
+
+
+	<table class="table" id="tablecart" style="min-width: 100% !important;">
+		<thead class="thead-primary">
+			<tr class="text-center">
+				<th>
+					Sl.No
+				</th>
+				<th>Product</th>
+				<th>Price</th>
+				<th>Quantity</th>
+				<th>Discount</th>
+				<th>Total</th>
+				<th>Discount Total</th>
+				{% if order.status == 'Delivered' %}
+
+				<th>Action</th>
+				{% endif %}
+			</tr>
+		</thead>
+		<tbody>
+			{% for x in orderitems %}
+
+			<tr class="text-center-1">
+
+				<td class="product-name">
+					{{ forloop.counter }}
+				</td><img src="{{item.product.image1.url}}" class="img">
+
+				<td class="product-name">
+					<h3> {{x.product.product_name}}</h3>
+
+				</td>
+				<td class="product-name">
+					<h3>{{x.product_price}}</h3>
+				</td>
+				<td class="product-name">
+					<h3>{{x.quantity}}</h3>
+				</td>
+				<td class="product-name">
+					<h3>0.00</h3>
+
+				</td>
+				<td class="product-name">
+					<h3> {{ x.product_price|mul:x.quantity|floatformat:2}}</h3>
+				</td>
+				<td class="product-name">
+					<h3> {{ x.product_price|mul:x.quantity|floatformat:2}}</h3>
+				</td>
+				{% if order.status == 'Delivered' %}
+				<td>
+					<h3> <a href="{% url 'review' x.product.id %}" class="btn btn-primary">Review </a></h3>
+
+				</td>
+				{% endif %}
+
+			</tr>
+
+
+			<!-- END TR-->
+			{% endfor %}
+
+		</tbody>
+	</table>
+</div>
+{% endblock content1 %}
