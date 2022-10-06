@@ -26,47 +26,25 @@
                 <tr>
                   <th>
                    Sl.No
-                  </th>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Description</th>   
-                  <th scope="col">valid from</th>
-                  <th scope="col">valid till</th>
+                  </th>                 
+                  <th>Product</th>                  
                   <th>Discount</th>  
-                  <th scope="col">Min Purchase</th>               
-                  <th>Action</th>
+                  <th>Edit</th>            
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
                 {% for x in page_obj %}
-
-                <tr>
-                  
+                <tr>                  
                   <td>
                     <div class="custom-control custom-checkbox">
                       {{ forloop.counter }}
                     </div>
-                  </td>
-                  <td>
-                    
-                      <img src="{% static x.offer_image.url %}" alt="..." width="100px" class="avatar-img rounded-circle">
-                    
-                  </td>
+                  </td>           
 
+                 
                   <td>
-                    <p class="mb-0 text-muted">{{x.offer_name}}</p>
-                    <!--<small class="mb-0 text-muted">Ap #331-7123 Lobortis Avenue</small>-->
-                  </td>
-                  <td>
-                    <p class="mb-0 text-muted"><a href="#" class="text-muted">{{x.description}}</a></p>
-                    <small class="mb-0 text-muted"></small>
-                  </td>
-                  <td>
-                    <p class="mb-0 text-muted"><a href="#" class="text-muted">{{x.valid_from}}</a></p>
-                    <small class="mb-0 text-muted"></small>
-                  </td>
-                  <td>
-                    <p class="mb-0 text-muted"><a href="#" class="text-muted">{{x.valid_to}}</a></p>
+                    <p class="mb-0 text-muted"><a href="#" class="text-muted">{{x.product.product_name}}</a></p>
                     <small class="mb-0 text-muted"></small>
                   </td>
                   <td>
@@ -74,26 +52,17 @@
                     <small class="mb-0 text-muted"></small>
                   </td>
                   <td>
-                    <p class="mb-0 text-muted"><a href="#" class="text-muted">{{x.min_purchase}}</a></p>
-                    <small class="mb-0 text-muted"></small>
+                    <a href="{% url 'update_cat' x.id %}"   class="text-muted" >Update</a>
+                    
                   </td>
+                  <td>
+                   
+                    <a href="{% url 'update_cat' x.id %}"   class="text-muted" >Delete</a>
+                   </td>
+                         
                   
                   
-                  
-                  <td><button class="btn btn-sm dropdown-toggle more-horizontal" type="button" data-toggle="dropdown"
-                      aria-haspopup="true" aria-expanded="false">
-                      <span class="text-muted sr-only">Action</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-
-                   <a href="{% url 'update_cat' x.id %}"  class="dropdown-item" >Update</a>
-                      <button hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'  _="on click call Swal.fire({title: 'Confirm', text:'Do you want to Deactivate?'})if result.isConfirmed trigger confirmed" hx-get="deactivate/{{ x.id }}" class="dropdown-item" hx-trigger="click"
-                        hx-target="#y" hx-swap="outerHTML"> Deactivate
-                      </button>
-                      
-
-                    </div>
-                  </td>
+                 
                 </tr>
               
 

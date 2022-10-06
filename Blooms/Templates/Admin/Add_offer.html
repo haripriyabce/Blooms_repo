@@ -19,15 +19,19 @@
                             
                   <section>
                     <div class="form-group">
-                      <label for="userName">Name *</label>
-                      <input id="userName" name="name" type="text" class="form-control required">
-                    </div>
-                    <div class="form-group">
-                     
-                        <label for="example-textarea">Description </label>
-                        <textarea name="description" class="form-control" id="example-textarea" rows="4"> </textarea>
+                      <label for="userName">Product *</label>
+                      <select name="name" class="form-control required">
+                        <option value="">Select Product</option> 
+                        {% for x in pro %}
+                        
                       
+                        <option value="{{x.id}}">{{x.product_name}}</option> 
+                        {% endfor %}
+                          
+
+                      </select>
                     </div>
+                   
                     <div class="form-group">
                      
                       <label for="example-textarea">offer in percentage (%) </label>
@@ -35,24 +39,7 @@
                 
                       
                   </div>
-                    <div class="form-group">
-                      <label for="userName">Valid from</label>
-                      <input  name="valid_from" type="date" class="form-control required">
-                    </div>
-                    <div class="form-group">
-                      <label for="userName">Valid till</label>
-                      <input  name="valid_till" type="date" class="form-control required">
-                    </div>
-                    <div class="form-group">
-                      <label for="userName">Minimum Purchase</label>
-                      <input  name="min_purchase" type="text" class="form-control required">
-                    </div>
-                    <div class="form-group">
-                     
-                      <label for="example-textarea">Image Upload </label>
-                      <input id="image_cat" name="image" type="file" class="form-control required">
-                  
-                  </div>  
+                
                     <input type="submit" class="btn mb-2 btn-info" value="Save">
                   
                     <input type="Reset" class="btn mb-2 btn-secondary">

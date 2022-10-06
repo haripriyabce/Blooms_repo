@@ -3,7 +3,13 @@
 {% block content %}
     
 {% load mathfilters %}
-  
+<style>
+  .form-control {
+    display: inline;
+    width: 25% !important;
+
+  }
+</style>
 
 
       <main role="main" class="main-content">
@@ -27,6 +33,34 @@
               <!-- table -->
               <div class="card shadow">
                 <div class="card-body">
+                  
+          <!-- <form action="" method="post">
+              {% csrf_token %}
+              <input class="form-control" type="date" name="from_date" placeholder="Begin Typing To Search Users...">
+              <input class="form-control" type="date" name="to_date" placeholder="Begin Typing To Search Users...">
+              <select name="yearly" id="yearly" onchange="calc_year(this.value)">
+                <option value="">Select Year </option>
+
+                {% for x in e %}
+                <option value="{{x}}"> {{x}}</option>
+                {% endfor %}
+              </select>
+
+              <select name="monthly" id="monthly" onchange="calc_month(this.value)">
+                <option value="">Select Month </option>
+                {% for x in mon %}
+                <option value="{{x}}"> {{x}}</option>
+                {% endfor %}
+              </select>
+            -->
+              <!--
+            <input type="text" name="search">
+            <input type="text" name="status">
+            <input type="text" name="payment_method">
+            <input type="text" name="bill_name">
+          -->
+        <!--    <input type="submit" value="Search">
+            </form>-->
                   <table class="table table-borderless table-hover">
                     <thead>
                       <tr>

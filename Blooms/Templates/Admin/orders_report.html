@@ -4,7 +4,7 @@
 <style>
   .form-control {
     display: inline;
-    width: 25%!important;
+    width: 25% !important;
 
   }
 </style>
@@ -17,39 +17,53 @@
             <h2 class="h3 mb-0 page-title">Orders</h2>
           </div>
           <div class="col-auto">
-            
-              <!--   <button type="button" class="btn btn-secondary"><span class="fe fe-trash fe-12 mr-2"></span>Delete</button>
+
+            <!--   <button type="button" class="btn btn-secondary"><span class="fe fe-trash fe-12 mr-2"></span>Delete</button>
                
-              -->    
-               <a href="{% url 'export_excel' %}" class="btn btn-primary mx-3">Export Excel</a>
-               <a href="{% url 'export_csv' %}"class="btn btn-secondary mx-3">Export CSV</a>
-               <a href="{% url 'export_pdf' %}"class="btn btn-info mx-3 ">Export PDF</a>
-               
-                 
+              -->
+            <a href="{% url 'export_excel' %}" class="btn btn-primary mx-3">Export Excel</a>
+            <a href="{% url 'export_csv' %}" class="btn btn-secondary mx-3">Export CSV</a>
+            <a href="{% url 'export_pdf' %}" class="btn btn-info mx-3 ">Export PDF</a>
+
+
           </div>
         </div>
-        
-       
+
+
         <!-- table -->
         <div class="card shadow">
           <div class="card-body">
-         
-                 
-          <form action="" method="post">
-            {% csrf_token %}
-            <input class="form-control" type="date" 
-            name="from_date" placeholder="Begin Typing To Search Users...">
-            <input class="form-control" type="date" 
-            name="to_date" placeholder="Begin Typing To Search Users...">
-           <!--
+
+
+            <form action="" method="post">
+              {% csrf_token %}
+              <input class="form-control" type="date" name="from_date" placeholder="Begin Typing To Search Users...">
+              <input class="form-control" type="date" name="to_date" placeholder="Begin Typing To Search Users...">
+              <select name="yearly" id="yearly" onchange="calc_year(this.value)">
+                <option value="">Select Year </option>
+
+                {% for x in e %}
+                <option value="{{x}}"> {{x}}</option>
+                {% endfor %}
+              </select>
+
+              <select name="monthly" id="monthly" onchange="calc_month(this.value)">
+                <option value="">Select Month </option>
+                {% for x in mon %}
+                <option value="{{x}}"> {{x}}</option>
+                {% endfor %}
+              </select>
+
+              <!--
             <input type="text" name="search">
             <input type="text" name="status">
             <input type="text" name="payment_method">
             <input type="text" name="bill_name">
-          --> 
-            <input type="submit" value="Search">
-          </form>
-                
+          -->
+              <input type="submit" value="Search">
+            </form>
+
+
             <table class="table table-borderless table-hover">
               <thead>
                 <tr>
@@ -60,18 +74,18 @@
                   <th>Ordered Date</th>
                   <th>Payment Method</th>
                   <th>Delivery Address</th>
-                  <th>Total Amount</th>  
-                 
+                  <th>Total Amount</th>
+
                 </tr>
               </thead>
               <tbody id="search-results">
                 {% for x in page_obj %}
 
                 <tr>
-                  
+
                   <td>
-                    <div class="custom-control" >
-                        {{ forloop.counter }}
+                    <div class="custom-control">
+                      {{ forloop.counter }}
                     </div>
                   </td>
                   <td>
@@ -85,8 +99,8 @@
                     <p class="mb-0 text-muted">{{x.payment.payment_method}}</p>
                   </td>
                   <td>
-                    <p class="mb-0 text-muted"><a href="#" class="text-muted">{{x.address.first_name}} 
-                       
+                    <p class="mb-0 text-muted"><a href="#" class="text-muted">{{x.address.first_name}}
+
                         {{x.address.house}},
                         {{x.address.town}},{{x.address.zip}},{{x.address.state}}</a></p>
                     <small class="mb-0 text-muted"></small>
@@ -95,34 +109,34 @@
                     {{x.order_total}}
                   </td>
 
-                 
-                 
+
+
                 </tr>
-              
+
 
                 {% endfor %}
                 <tr></tr>
               </tbody>
-             
+
             </table>
             <div class="pagination">
               <span class="step-links">
-                  {% if page_obj.has_previous %}
-                      <a href="?page=1">&laquo; first</a>
-                      <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                  {% endif %}
-          
-                  <span class="current">
-                      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                  </span>
-          
-                  {% if page_obj.has_next %}
-                      <a href="?page={{ page_obj.next_page_number }}">next</a>
-                      <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                  {% endif %}
+                {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                  Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
               </span>
-          </div>
-         <!-- <center>
+            </div>
+            <!-- <center>
             {% for p in pg.paginator.page_range %}
             <a href="?page={{p}}" class="btn btn-light btn-sm {% if pg.number == p %} active 
             {% endif %}">{{p}}</a>
@@ -130,7 +144,7 @@
         </center>-->
           </div>
         </div>
-       
+
       </div> <!-- .col-12 -->
     </div> <!-- .row -->
   </div> <!-- .container-fluid -->
@@ -260,5 +274,15 @@
     </div>
   </div>
 </main> <!-- main -->
+<script>
+  function calc_year(year) {
+    //alert(year);
+    
+  }
+  function calc_month(month) {
+    //alert(month);
+  }
+ 
+</script>
 <script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
 {% endblock content %}

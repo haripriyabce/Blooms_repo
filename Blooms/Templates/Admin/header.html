@@ -175,17 +175,17 @@
             <li class="nav-item w-100">
               <a class="nav-link" href="{% url 'rep_orders' %}">
                 <i class="fe fe-calendar fe-16"></i>
-                <span class="ml-3 item-text">Orders Report</span>
+                <span class="ml-3 item-text">Sales Report</span>
                
               </a>
             </li>
-            <li class="nav-item w-100">
+        <!--   <li class="nav-item w-100">
               <a class="nav-link" href="{% url 'rep_products' %}">
                 <i class="fe fe-box fe-16"></i>
                 <span class="ml-3 item-text">Product Report</span>
                
               </a>
-            </li>
+            </li>-->
             <li class="nav-item w-100">
               <a class="nav-link" href="{% url 'content' %}">
                 <i class="fe fe-layers fe-16"></i>
@@ -193,12 +193,23 @@
                 <span class="badge badge-pill badge-primary">New</span>
               </a>
             </li>
-            <li class="nav-item w-100">
-              <a class="nav-link" href="{% url 'offer' %}">
-                <i class="fe fe-layers fe-16"></i>
+           
+            <li class="nav-item dropdown">
+              <a href="#offer" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                <i class="fe fe-grid fe-16"></i>
                 <span class="ml-3 item-text">Offer</span>
-                <span class="badge badge-pill badge-primary">New</span>
               </a>
+             <ul class="collapse list-unstyled pl-4 w-100" id="offer">
+              <!--  <li class="nav-item">
+                  <a class="nav-link pl-3" href="./table_basic.html"><span class="ml-1 item-text">CategoryWise Offer</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link pl-3" href="./table_advanced.html"><span class="ml-1 item-text">SubCategoryWise Offer</span></a>
+                </li>-->
+                <li class="nav-item">
+                  <a class="nav-link pl-3" href="{% url 'offer' %}"><span class="ml-1 item-text">ProductWise Offer</span></a>
+                </li>
+              </ul> 
             </li>
             <li class="nav-item w-100">
               <a class="nav-link" href="{% url 'coupon_list' %}">

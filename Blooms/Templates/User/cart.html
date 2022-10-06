@@ -36,9 +36,9 @@
 						<th>&nbsp;</th>
 						<th>&nbsp;</th>
 						<th>Product</th>
-						<th>Price</th>
+						<th style='width:20%;'>Price</th>
 						<th>Quantity</th>
-						<th>Total</th>
+						<th style='width:20%;'>Total</th>
 					  </tr>
 					</thead>
 					<tbody  hx-target="closest tr" hx-swap="outerHTML swap:1s">
@@ -49,15 +49,24 @@
 						<td class="image-prod">
 						<img src="{{item.product.image1.url}}" class="img">
 						</td>
-						
+					
+							
+					
 						<td class="product-name">
 							<h3>{{item.product.product_name}}</h3>
 							<p>Far far away, behind the word mountains, far from the countries</p>
 						</td>
 						
-						<td class="price">
-							<input id="row-price{{item.id}}" value={{item.product.price}} type="hidden">
-							₹ &nbsp{{item.product.price}}</td>
+						<td class="price">		
+							{% for y in pro_off %}												
+							{% if y.product_id == item.product.id %} 								
+							<input type="hidden" class="status" value="{{item.id}}">
+							<input type="hidden" id="dis{{item.id}}" value="{{y.discount}}">															
+							{% endif %}							
+						 {% endfor %}			
+						<input class="nodis_price" id="row-price{{item.id}}" value="{{item.product.price}}" type="hidden">
+							₹ &nbsp<span id="price{{item.id}}">{{item.product.price}}</span>
+						</td>
 						
 						<td class="quantity">
 							<div class="input-group mb-3">
@@ -67,7 +76,7 @@
 										<i class="ion-ios-remove"></i>
 									</button>
 								</span>
-								<input type="hidden" id="pro_id"  value="{{item.id}}">
+								<input class="idd" type="hidden"  value="{{item.id}}">
 								{% csrf_token %}
 								<input type="text" id="quantit{{item.id}}" name="quantity{{ item.id }}" class="form-control input-number" 	min="1" max="100" value="{{item.quantity}}">
 								<span class="input-group-btn ml-2">
@@ -77,9 +86,14 @@
 								</span>
 						  </div>
 					  </td>
-						<input type="hidden" id="row-totall{{item.id}}">
-						<td >₹ &nbsp<span class="total" id="row-total{{item.id}}">{{ item.product.price|mul:item.quantity|floatformat:2}}</span></td>
-					  </tr><!-- END TR-->
+						
+						<td >
+							₹ &nbsp<span class="total" id="row-total{{item.id}}">{{ item.product.price|mul:item.quantity|floatformat:2}}</span>
+							<input type="hidden"  class="total_org" id="org_total{{item.id}}" >
+							<input class="total_di" type="hidden" id="row_dis{{item.id}}" >
+						</td>
+						
+					</tr><!-- END TR-->
 					  {% endfor %}
 					
 					</tbody>
@@ -101,94 +115,20 @@
 
 				<p class="d-flex">
 					<span>Discount</span>
-					₹ &nbsp<span>0.00</span>
+					₹ &nbsp<span id="complete-dis">0.00</span>
 				</p>
-				<p class="d-flex">
-					<span>Coupon Discount</span>
-					<input type="hidden" name="perct" id="perct" value="{{dis}}">
-					{% if dis %}
-					₹ &nbsp<span id="cart-disco">0.00</span>
-				
-					{% else %}
-					<span><a style="color:rgb(255, 63, 108);" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-							Use Coupon
-						</a></span>
-					{% endif %}
-				
-				</p>
-				{% if dis %}
-				<p>				<a style="color:rgb(255, 63, 108);" type="button" data-bs-toggle="modal"
-						data-bs-target="#staticBackdrop">
-						Apply Another Coupon
-					</a>				
-				</p>
-				{% endif %}
+			
 				<hr>
 				<p class="d-flex total-price">
 					<span>Total</span>
 					₹ &nbsp<span id="cart-totall2">0.00</span>
 				</p>
 			</div>
+
 			<p class="text-center"><a href="{% url 'checkt_add' %}" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
 			
 
-		<!-- Modal -->
-		<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-			tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="staticBackdropLabel">APPLY COUPON</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<form action="{% url 'apply_coupon'%}" Method="post">
-						{% csrf_token %}
-						<div class="modal-body">
-					
-							<div>
-								<div>
-								<!--<input class="form-control form-control-sm" type='search' name="search">-->
-								</div>
-					
-								<div>
-									<h6>ADDRESS </h6>
-								</div>
-					
-								{% for coupon in coupons %}
-								<div class="shadow-lg p-3 mb-5 bg-body rounded">
-									<div class="form-check">
-										{% if coupon.id == coup_id %}
-										<input class="form-check-input" disabled  type="radio" name="coupon_apply" value="{{ coupon.id }}"
-										id="flexCheckChecked">
-										{% else %}
-										<input class="form-check-input"   type="radio" name="coupon_apply" value="{{ coupon.id }}"
-										id="flexCheckChecked">
-										{% endif %}
-										
-										<label class="form-check-label form-control-sm" for="flexRadioDefault2">
-											<p><strong>Code: {{ coupon.coupon_code }}</strong></p>
-											<p><strong>Save:{{ coupon.discount }}%OFF</strong></p>
-											<p><strong>On minimum purchase of Rs.{{ coupon.min_purchase }}</strong></p>
-											<p><strong>Expires on:{{ coupon.valid_to }}</strong></p>
-					
-										</label>
-									</div>
-								</div>
-								{% endfor %}
-							</div>
-						</div>
-					
-						<div class="modal-footer">
-					
-							<input type="submit" class="btn btn-primary" style="width:50%;" value="APPLY">
-					
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		
+
 		
 		</div>
 	</div>
@@ -201,10 +141,13 @@
 		var val =  document.getElementById("quantit"+id).value;
 		val++;
 		document.getElementById("quantit"+id).value=val;
-		var s= val * document.getElementById("row-price"+id).value;
-		
-		document.getElementById("row-totall"+id).value=s;
-		 document.getElementById("row-total"+id).innerHTML=s;
+		var s= val * document.getElementById("price"+id).innerHTML;
+		 document.getElementById("row-total"+id).innerHTML=s.toFixed(2);
+		 var s2= val * document.getElementById("row-price"+id).value;
+		 document.getElementById("org_total"+id).value=s2.toFixed(2);
+		 dis=s2-s
+		 document.getElementById("row_dis"+id).value=dis.toFixed(2);
+		 
 		 calc_total();
 		
 	}
@@ -213,31 +156,53 @@
 		if (val > 1) {
 			val--;
 			document.getElementById("quantit"+id).value = val;	
-			var s= val * document.getElementById("row-price"+id).value;
-		
-		 document.getElementById("row-total"+id).innerHTML=s;	
-		 calc_total();	
+			var s= val * document.getElementById("price"+id).innerHTML;		
+		 document.getElementById("row-total"+id).innerHTML=s.toFixed(2);
+		 var s2= val * document.getElementById("row-price"+id).value;
+		 document.getElementById("org_total"+id).value=s2.toFixed(2);
+		 dis=s2-s
+		 document.getElementById("row_dis"+id).value=dis.toFixed(2);
+		  calc_total();	
 		}
 		}
 		function calc_total(){
 			var sum = 0;
+			var tot_dis=0
 			$(".total").each(function(){
-			  sum += parseFloat($(this).text());
+			  sum += parseFloat($(this).text());	
+
 			});
-			$('#cart-totalll').text(sum);
-			var disc=$('#perct').val();
-			var discount=0.00;
-			if (disc!=''){
-				discount=(sum*disc)/100;
-				//alert($('#perct').val())	
-				sum-=discount;			
-			}		
-			$('#cart-disco').text(discount);  
-			$('#cart-totall2').text(sum);   			  
+			$(".total_di").each(function(){
+				tot_dis += parseFloat($(this).val());	
+  
+			  });
+			$('#cart-totalll').text((sum+tot_dis).toFixed(2));
+			$('#complete-dis').text(tot_dis.toFixed(2));
+			
+			$('#cart-totall2').text(sum.toFixed(2));   			  
 		}
 		$(document).ready(function(){
-			calc_total();
-	
+			$(".status").each(function(){
+				id=$(this).val();
+				di=parseFloat($('#dis'+id).val());
+				pr=parseFloat($('#row-price'+id).val());									
+				e=pr-((pr*di)/100);				
+				$('#price'+id).text(e.toFixed(2));
+				val=$('#quantit'+id).val();	
+			
+		 	  });	
+			   $(".idd").each(function(){
+				id=$(this).val();
+				val=$('#quantit'+id).val();	
+				var s= val * parseFloat($('#price'+id).text());	
+			$('#row-total'+id).text(s.toFixed(2));
+				var s2= val * parseFloat($('#row-price'+id).val());
+			$('#org_total'+id).val(s2.toFixed(2));
+		 dis=s2-s;
+		 $('#row_dis'+id).val(dis.toFixed(2));
+
+			});
+			calc_total();	
 			$('#tablecart').on('click', '.ion-ios-close', function (e) {
 				e.preventDefault();
 				$(this).closest('tr').remove();
@@ -245,32 +210,6 @@
 			});
 	
 		});
-</script>
-  
-<script>
-	
-</script>
-<script>
-	/*function callaj(id,val)
-	{
-		alert("jjjk");
-		var token = $('input[name=csrfmiddlewaretoken]').val();
-	  data: {
-		  'product_id':id,
-		  'quantity': val,
-		 
-	  },	
-	
-		$.ajax({
-			method: "POST",
-			{% comment %} url: '{% url "update_cart" %}', {% endcomment %}
-			data : data ,
-			success: function (response) {
-					alertify.success(response.status)
-
-			}
-		})
-	}*/
 </script>
 <script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
     

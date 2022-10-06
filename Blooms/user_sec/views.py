@@ -1,4 +1,5 @@
 #from twilio.rest import Client
+from ast import Try
 import random
 from django.views.decorators.cache import cache_control
 from django.shortcuts import redirect, render
@@ -6,6 +7,7 @@ from django.contrib import messages
 from admin_p.models import Users
 from product.models import Product,Product_cate,Stock
 from content.models import Content
+from order.models import Product_off
 from category.models import Category,Subcategory
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
@@ -219,7 +221,9 @@ def products(request,cat=None,sub=None):
     #     return render(request,'Admin/product_list.html',{'products': products })
     categories =Category.objects.all()
     subcategories=Subcategory.objects.all()         
-    return render( request,'User/product_list.html',{'products':products,'z':z,'logo_light':logo_light,'subcategories':subcategories,'categories':categories})
+    pro_off=Product_off.objects.all()
+    print(pro_off)
+    return render( request,'User/product_list.html',{'products':products,'z':z,'logo_light':logo_light,'subcategories':subcategories,'categories':categories,'pro_off':pro_off})
 
 def logout(request):
     request.session.flush()    
@@ -242,11 +246,20 @@ def product_det(request,id):
     if 'username' in request.session:                   
         print("de3")   
         z=True   
+    discount=0
+    pro= Product.objects.get(id=id)  
+    try:
+        pro_off=Product_off.objects.get(product_id=id) 
+        discount=pro_off.discount
+    except Product_off.DoesNotExist:        
+        pass
+    obj=None    
+    pro_cate = Product_cate.objects.filter(product_id=id)
+    if pro_cate.exists():
+        obj = pro_cate.first() 
     
-    pro= Product.objects.get(id=id) 
-             
-    print(pro)
-    products= Product.objects.all()[4:8]     
-    return render( request,'User/product_details.html',{'pro': pro,'products':products,'z':z,'logo_light':logo_light})
+    products= Product_cate.objects.select_related('product').filter(catid_id=obj.id).distinct('product_id')[:2]  
+    pro_off=Product_off.objects.all()   
+    return render( request,'User/product_details.html',{'pro': pro,'products':products,'z':z,'logo_light':logo_light,'dis':discount,'pro_off':pro_off})
 
 

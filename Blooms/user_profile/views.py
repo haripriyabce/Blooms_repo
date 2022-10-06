@@ -30,7 +30,12 @@ def up_address(request,id):
         house = request.POST['add1']            
         state = request.POST['state']
         zip = request.POST['zip']  
-        RadioDefault = request.POST['RadioDefault']  
+        #RadioDefault = request.POST['RadioDefault']  
+        RadioDefault=None
+        try:
+                RadioDefault = request.POST["RadioDefault"]
+        except KeyError:
+            RadioDefault = "None"
         if phone_number=='' or email=='' or house=='' or state=='' or town==''or zip=='' or first_name=='':
             messages.info(request,'Please fill valid entries')            
             return redirect(up_address(id))

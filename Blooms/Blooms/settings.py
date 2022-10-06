@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,12 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+uhymlv45lcdhk3bp%4ugk9xj07#@u0ci_7)++e6p=x&14mcw!'
+# SECRET_KEY = 'django-insecure-+uhymlv45lcdhk3bp%4ugk9xj07#@u0ci_7)++e6p=x&14mcw!'
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['13.230.153.253','localhost']
 
 
 # Application definition
@@ -96,9 +99,9 @@ WSGI_APPLICATION = 'Blooms.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ne_bloom',
-        'USER': 'postgres',
-        'PASSWORD': 'password',
+        'NAME': os.environ.get('NAME'),
+        'USER': os.environ.get('USER'),
+        'PASSWORD': os.environ.get('PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -146,7 +149,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 MEDIA_URL = 'ims/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 RAZORPAY_KEY_ID='rzp_test_CLJZAjlkyL5HrW'
 RAZORPAY_KEY_SECRET='QCaYdk2SVhSH9aQPbShWNmtB'
 
@@ -158,3 +161,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# if ENVIRONMENT == 'production':
+#    SECURE_BROWSER_XSS_FILTER = True
+#    X_FRAME_OPTIONS = 'DENY'
+#    SECURE_SSL_REDIRECT = True
+#    SECURE_HSTS_SECONDS = 3600
+#    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#    SECURE_HSTS_PRELOAD = True
+#    SECURE_CONTENT_TYPE_NOSNIFF = True
+#    SESSION_COOKIE_SECURE = True 
+#    CSRF_COOKIE_SECURE = True 
+#    SECURE_REFERRER_POLICY = 'same-origin'

@@ -19,7 +19,15 @@
 					  <div class="col-sm-6 col-md-6 col-lg-4 ftco-animate">
 						  <div class="product">
 							  <a href="{% url 'det' x.product.id %}" class="img-prod"><img class="img-fluid" src="{% static 'ims/' %}{{x.product.image1}}" alt="Colorlib Template">
-								 <!-- <span class="status">30%</span>-->
+								 
+								 {% for y in pro_off %}									
+									{% if y.product_id == x.id %} 
+										
+									<span class="status">{{y.discount}}%</span>
+									{% endif %}
+								 {% endfor %}
+									
+								
 								  <div class="overlay"></div>
 							  </a>
 							  <div class="text py-3 px-3">
@@ -92,14 +100,14 @@
 					<h2 class="heading mb-4"><a href="#">Sort</a></h2>
 					<ul>
 					 
-						<li><a href="{% url 'us_products' x.id %}{{ y.id }}">Featured</a></li>
+						{% comment %} <li><a href="{% url 'us_products' x.id %}{{ y.id }}">Featured</a></li>
 						<li><a href="{% url 'us_products' x.id %}{{ y.id }}">Best selling</a></li>
 						<li><a href="{% url 'us_products' x.id %}{{ y.id }}">Alphabetically, A-Z</a></li>
 						<li><a href="{% url 'us_products' x.id %}{{ y.id }}">Alphabetically, Z-A</a></li>
 						<li><a href="{% url 'us_products' x.id %}{{ y.id }}">Price, low to high</a></li>
 						<li><a href="{% url 'us_products' x.id %}{{ y.id }}">Price, high to low</a></li>
 						<li><a href="{% url 'us_products' x.id %}{{ y.id }}">Date, old to new</a></li>
-						<li><a href="{% url 'us_products' x.id %}{{ y.id }}">Date, new to old</a></li>
+						<li><a href="{% url 'us_products' x.id %}{{ y.id }}">Date, new to old</a></li> {% endcomment %}
 		
 					</ul>
 				</div>

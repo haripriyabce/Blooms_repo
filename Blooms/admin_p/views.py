@@ -2,6 +2,7 @@ import csv
 from decimal import Subnormal
 import os
 import tempfile
+import calendar
 from django.db.models import Sum,Count
 from django.views.decorators.cache import cache_control
 from django.http import HttpResponse
@@ -12,7 +13,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.template import loader
 from admin_p.models import Users,Shipping_Address
-from order.models import Order,Order_Product, Payment
+from order.models import Order,Order_Product, Payment,Product_off
 from category.models import Category,Subcategory
 from product.models import Product,Product_cate,Offer
 from product.forms import ProductForm
@@ -305,45 +306,78 @@ def products(request):
 def rep_products(request):
     products=Product.objects.annotate(quantity_sum=Sum('order_product__quantity')).filter(quantity_sum__gt=0).order_by('-quantity_sum')[:5]
        
-    # if request.method == 'POST':
-    #     search = request.POST["product_search"] 
-    #     products = Product.objects.filter(product_name__icontains = search).order_by('-id')
+    if request.method=='POST':        
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')  
+        year = request.POST.get('yearly')
+        month = request.POST.get('monthly')  
+        if from_date !='' and to_date!='':
+            from_date = datetime.datetime.strptime(from_date, '%Y-%m-%d')
+            to_date = datetime.datetime.strptime(to_date, '%Y-%m-%d')
+            products=Product.objects.annotate(quantity_sum=Sum('order_product__quantity')).filter(created_at__date__range=[from_date, to_date]) 
+        if  year !='': 
+            products=Product.objects.annotate(quantity_sum=Sum('order_product__quantity')).filter(created_at__year__gte=year,created_at__year__lte=year) 
+        if  month !='':      
+            datetime_object = datetime.datetime.strptime(month, "%B")
+            month = datetime_object.month
+            products=Product.objects.annotate(quantity_sum=Sum('order_product__quantity')).filter(created_at__month__gte=month,created_at__month__lte=month) 
+        
         
     paginator = Paginator(products, 10) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)    
-    return render( request,'Admin/products_report.html',{'page_obj':page_obj}) 
+    mon=list(calendar.month_name)
+    e=range(2011,2023)
+    return render( request,'Admin/products_report.html',{'page_obj':page_obj,'e':e,'mon':mon}) 
 def profile(request):
     return render(request,'Admin/profile.html')
 def orders(request):
-    orders=Order.objects.select_related('address').select_related('payment').order_by('-id')
-    
+    orders=Order.objects.select_related('address').select_related('payment').order_by('-id')    
     paginator = Paginator(orders, 10) 
-
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render( request,'Admin/order_list.html',{'page_obj':page_obj})
 def rep_orders(request): 
-    orders=Order.objects.select_related('address').select_related('payment').order_by('-id')
-   
+    orders=Order.objects.select_related('address').select_related('payment').order_by('-id')   
     if request.method=='POST':        
         from_date = request.POST.get('from_date')
-        to_date = request.POST.get('to_date')    
+        to_date = request.POST.get('to_date')  
+        year = request.POST.get('yearly')
+        month = request.POST.get('monthly')  
         if from_date !='' and to_date!='':
             from_date = datetime.datetime.strptime(from_date, '%Y-%m-%d')
             to_date = datetime.datetime.strptime(to_date, '%Y-%m-%d')
-
-            orders = Order.objects.filter(created_at__date__range=[from_date, to_date])
-   
-    
-    #orders=Order.objects.select_related('address').select_related('payment').order_by('-id')
-    
+            orders = Order.objects.filter(created_at__date__range=[from_date, to_date]) 
+        if  year !='': 
+            orders = Order.objects.filter(created_at__year__gte=year,created_at__year__lte=year) 
+        if  month !='':      
+            datetime_object = datetime.datetime.strptime(month, "%B")
+            month = datetime_object.month
+            orders = Order.objects.filter(created_at__month__gte=month,created_at__month__lte=month) 
+            
+    #orders=Order.objects.select_related('address').select_related('payment').order_by('-id')    
     paginator = Paginator(orders, 10) 
-
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render( request,'Admin/orders_report.html',{'page_obj':page_obj})
-           
+    mon=list(calendar.month_name)
+    e=range(2011,2023)
+    
+    return render( request,'Admin/orders_report.html',{'page_obj':page_obj,'e':e,'mon':mon})       
+def rep_orders_yearly(request): 
+    orders=Order.objects.select_related('address').select_related('payment').order_by('-id')   
+    if request.method=='POST':        
+        year = request.POST.get('yearly')
+        print(year)
+       
+    #orders = Order.objects.filter(created_at__date__range=[from_date, to_date])    
+    #orders=Order.objects.select_related('address').select_related('payment').order_by('-id')    
+    paginator = Paginator(orders, 10) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    mon=list(calendar.month_name)
+    e=range(2011,2023)
+    return HttpResponse('rghh')
+    #return render( request,'Admin/orders_report.html',{'page_obj':page_obj,'e':e,'mon':mon})           
 def orders_de(request,id):
     order=Order.objects.select_related('address').select_related('payment').get(id=id)
     orderitems=Order_Product.objects.select_related('product').filter(order_id=id)       
@@ -370,7 +404,7 @@ def ship(request,id):
     return HttpResponse("Shipped")
 
 def offer(request):
-    offer=Offer.objects.all().order_by('-id') 
+    offer=Product_off.objects.select_related('product').order_by('-id') 
     paginator = Paginator(offer, 10) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number) 
@@ -378,27 +412,23 @@ def offer(request):
 
 def add_offer(request):  
     if request.method == 'POST':
-        name = request.POST['name']
-        description = request.POST['description']
-        image = request.FILES['image']
-        valid_from = request.POST['valid_from'] 
-        valid_till = request.POST['valid_till'] 
+        name = request.POST['name']         
         discount = request.POST['discount']
-        min_purchase = request.POST['min_purchase']
-        if name=='' or description=='' :
+        if name=='' :
             messages.info(request,'Please fill valid entries') 
             return redirect(add_offer) 
         else:   
-            if Offer.objects.filter(offer_name=name).exists():
+            if Product_off.objects.filter(product_id=name).exists():
                 messages.info(request,'Offer Already exists')
                 return redirect(add_offer)            
             else:   
-                cate= Offer.objects.create(offer_name=name,slug=name,description=description,offer_image=image,valid_from=valid_from,valid_to=valid_till,min_purchase=min_purchase,discount=discount)
+                cate= Product_off.objects.create(product_id=name,discount=discount)
                 cate.save()
                 print('Offer created')
                 return redirect(offer)             
     else:
-        return render(request,'Admin/Add_offer.html')  
+        product=Product.objects.all().order_by('product_name')
+        return render(request,'Admin/Add_offer.html',{'pro':product})  
 
 def update_offer(request,id): 
     if 'admin_username' in request.session:

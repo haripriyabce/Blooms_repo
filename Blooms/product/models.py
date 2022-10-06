@@ -71,7 +71,7 @@ class Offer(models.Model):
     valid_from = models.DateTimeField( null = True)
     valid_to = models.DateTimeField( null = True )
     discount = models.IntegerField(validators=[MinValueValidator(0),MaxValueValidator(100)])
-    min_purchase=models.IntegerField(null = True)
+    
     is_active = models.BooleanField(default=True)
        
 

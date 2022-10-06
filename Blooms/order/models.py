@@ -47,6 +47,7 @@ class Order(models.Model):
     order_total = models.FloatField(blank=True, null=True)
     address= models.ForeignKey(Shipping_Address,on_delete=models.SET_NULL,related_name='address' ,blank=True, null=True)
     status = models.CharField(max_length=25, choices=STATUS, default='Order Placed')
+    coupon_applied =models.CharField(max_length=30,blank=True,null= True, default=0)
     # coupon_applied = models.BooleanField( default= False )
     # coupon = models.CharField( blank=True , max_length=30)
 
@@ -76,15 +77,24 @@ class Order_Product(models.Model):
     ordered = models.BooleanField(default=False)
     created_at  = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
+    discount= models.IntegerField(null=True) 
+    discount_price=models.FloatField(null=True)
 
     def sub_total(self):
-        return self.product_price * self.quantity
-
-    
+        return self.product_price * self.quantity    
 
     def __str__(self):
         return self.product.product_name
 
     class Meta:
         ordering= ('-created_at','-updated_at')
+
+
    
+class Product_off(models.Model):    
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)     
+    discount = models.IntegerField()
+    def __str__(self):
+        return str(self.product)
+    
+

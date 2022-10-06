@@ -1,9 +1,9 @@
 
 {% extends 'User/use_head.html' %}
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css'>
-
 {% load static %}
 {% block content %}
+{% load mathfilters %}
 <style>
 	.addressBlocks-base-radioIcon {
 		position: absolute;
@@ -22,6 +22,7 @@
     <section class="ftco-section">
       <div class="container">
         <div class="row">
+			{% if addresses %}
 			<div class="col-md-8">			
 				<div class="col-sm-6 col-md-6 col-lg-12 ">
 					{% for message in messages %}
@@ -89,7 +90,7 @@
 																placeholder="State" aria-label=".form-control-sm example">
 														</div>
 														<div class="form-check">
-															<input class="form-check-input" type="radio" name="RadioDefault" value="True"
+															<input class="form-check-input" type="radio" name="RadioDefault1" 
 																id="flexCheckChecked">
 															<label class="form-check-label form-control-sm" for="flexRadioDefault2">
 																Make this my default address
@@ -118,7 +119,7 @@
 
 		
 
-			{% if addresses %}
+			
 			<div class="col-md-8">
 				<div class="col-sm-6 col-md-6 col-lg-12 ">
 					<div class="accordion " id="accordionPanelsStayOpenExample">
@@ -144,7 +145,7 @@
 							<div id="panelsStayOpen-collapse{{ x.id }}" class="accordion-collapse collapse "
 								aria-labelledby="panelsStayOpen-heading{{ x.id }}">
 								<div class="accordion-body">
-									<span type="button" class="btn " data-bs-toggle="modal"
+									<span  class="btn " data-bs-toggle="modal"
 										data-bs-target="#staticBackdrop{{ x.id }}">
 										Edit
 									</span>
@@ -264,80 +265,61 @@
 	          		<div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="firstname">First Name</label>
-	                  <input type="text" name="first_name" {% if ship %}value="{{ship.first_name}}"{% endif %}  class="form-control" placeholder="">
+	                  <input type="text" name="first_name"  class="form-control" placeholder="">
 	                </div>
 	              </div>
 	              <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">Last Name</label>
-	                  <input type="text" name="last_name" {% if ship %}value="{{ship.last_name}}"{% endif %}  class="form-control" placeholder="">
+	                  <input type="text" name="last_name" class="form-control" placeholder="">
 	                </div>
                 </div>
                 <div class="w-100"></div>
 		            <div class="col-md-12">
-		            	<!--<div class="form-group">
-		            		<label for="country">State / Country</label>
-		            		<div class="select-wrap">
-		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-		                  <select name="" id="" class="form-control">
-		                  	<option value="">France</option>
-		                    <option value="">Italy</option>
-		                    <option value="">Philippines</option>
-		                    <option value="">South Korea</option>
-		                    <option value="">Hongkong</option>
-		                    <option value="">Japan</option>
-		                  </select>
-		                </div>
-		            	</div>-->
+		            	
 		            </div> 
 		            <div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="streetaddress">Street Address</label>
-	                  <input type="text" name="add1" {% if ship %}value="{{ship.house}}"{% endif %} class="form-control" placeholder="House number and street name">
+	                  <input type="text" name="add1" class="form-control" placeholder="House number and street name">
 	                </div>
 		            </div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
-	                  <input type="text" name="add2" {% if ship %}value="{{ship.town}}"{% endif %} class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
+	                  <input type="text" name="add2"  class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
 	                </div>
 		            </div>
 		            <div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="towncity">State</label>
-	                  <input type="text" name="state"  {% if ship %}value="{{ship.state}}"{% endif %}  class="form-control" placeholder="">
+	                  <input type="text" name="state"    class="form-control" placeholder="">
 	                </div>
 		            </div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 		            		<label for="postcodezip">Postcode / ZIP *</label>
-	                  <input type="text" name="zip"  {% if ship %}value="{{ship.zip}}"{% endif %}  class="form-control" placeholder="">
+	                  <input type="text" name="zip"   class="form-control" placeholder="">
 	                </div>
 		            </div>
 		            <div class="w-100"></div>
 		            <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="phone">Phone</label>
-	                  <input type="text" name="Phone_number"  {% if ship %}value="{{ship.phone_number}}"{% endif %}  class="form-control" placeholder="">
+	                  <input type="text" name="Phone_number"  class="form-control" placeholder="">
 	                </div>
 	              </div>
 	              <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="emailaddress">Email Address</label>
-	                  <input type="text" name="email"  {% if ship %}value="{{ship.email}}"{% endif %}  class="form-control" placeholder="">
+	                  <input type="text" name="email" class="form-control" placeholder="">
 	                </div>
                 </div>
                 <div class="w-100"></div>
                 <div class="col-md-12">
                 	<div class="form-group mt-4">
-										<div class="radio">
-											{% if z %} 
-											<label><input hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-get="show_addresses"  hx-trigger="click" hx-target="#y" hx-swap="innerHTML"  type="radio" name="optradio"> Ship to different address</label>
-										  {% else %}
-										  <label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label>
-										   {% endif %} 
-										</div>
+										
 									</div>
                 </div>
 				
@@ -358,25 +340,45 @@
 	          			<h3 class="billing-heading mb-4">Cart Total</h3>
 	          			<p class="d-flex">
 		    						<span>Subtotal</span>
-		    						<span>₹ &nbsp{{total}}</span>
+		    						₹ &nbsp<span id="subtotal">{{ total|add:tot_di}}</span>
 		    					</p>
 		    					<p class="d-flex">
 		    						<span>Delivery</span>
-		    						<span>₹ &nbsp 0.00</span>
+		    						₹ &nbsp<span> 0.00</span>
 		    					</p>
 		    					<p class="d-flex">
 		    						<span>Discount</span>
-		    						<span>₹ &nbsp 0.00</span>
+		    						₹ &nbsp<span> {{tot_di}}</span>
 		    					</p>
+								<p class="d-flex">
+									<span>Coupon Discount</span>
+									<input type="hidden" name="perct" id="perct" value="{{dis}}">
+									{% if dis %}
+									₹ &nbsp<span id="cart-disco">0.00</span>
+								
+									{% else %}
+									<span><a style="color:rgb(255, 63, 108);" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">
+											Use Coupon
+										</a></span>
+									{% endif %}
+								
+								</p>
+								{% if dis %}
+								<p>				<a style="color:rgb(255, 63, 108);" type="button" data-bs-toggle="modal"
+										data-bs-target="#staticBackdrop">
+										Apply Another Coupon
+									</a>				
+								</p>
+								{% endif %}
 		    					<hr>
 		    					<p class="d-flex total-price">
 		    						<span>Total</span>
-		    						<span>₹ &nbsp{{total}}</span>
+		    						₹ &nbsp<span id="total">{{ total}}</span>
 		    					</p>
 								
 									{% if i %}
 									<p>
-										<input type="submit" name="sub" class="btn btn-primary py-3 px-4" value="CONTINUE">
+										<input type="submit" name="subm" class="btn btn-primary py-3 px-4" value="CONTINUE">
 										</p>
 										{% else %}
 										<p>
@@ -396,6 +398,61 @@
 	          </div> 
 			 
 			</form>
+			<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false"
+			tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="staticBackdropLabel">APPLY COUPON</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<form action="{% url 'apply_coupon' %}" Method="post">
+						{% csrf_token %}
+						<div class="modal-body">
+					
+							<div>
+								<div>
+								<!--<input class="form-control form-control-sm" type='search' name="search">-->
+								</div>
+					
+								<div>
+									<h6>COUPON </h6>
+								</div>
+					
+								{% for coupon in coupons %}
+								<div class="shadow-lg p-3 mb-5 bg-body rounded">
+									<div class="form-check">
+										{% if coupon.id == coup_id %}
+										<input class="form-check-input" disabled  type="radio" name="coupon_apply" value="{{ coupon.id }}"
+										id="flexCheckChecked">
+										{% else %}
+										<input class="form-check-input"   type="radio" name="coupon_apply" value="{{ coupon.id }}"
+										id="flexCheckChecked">
+										{% endif %}
+										<input    type="hidden" name="from" value="checkt_add">
+										<label class="form-check-label form-control-sm" for="flexRadioDefault2">
+											<p><strong>Code: {{ coupon.coupon_code }}</strong></p>
+											<p><strong>Save:{{ coupon.discount }}%OFF</strong></p>
+											<p><strong>On minimum purchase of Rs.{{ coupon.min_purchase }}</strong></p>
+											<p><strong>Expires on:{{ coupon.valid_to }}</strong></p>
+					
+										</label>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					
+						<div class="modal-footer">
+					
+							<input type="submit" class="btn btn-primary" style="width:50%;" value="APPLY">
+					
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
            <!-- .col-md-8 -->
         </div>
       </div>
@@ -406,5 +463,20 @@
 			$('#ee'+t).prop('checked', true);
 			$('#addid').val(t);
 		}
+		function calc_total(){	
+			sum=$('#total').text();
+			var disc=$('#perct').val();
+			var discount=0.00;
+			if (disc!=''){
+				discount=(sum*disc)/100;
+				//alert($('#perct').val())	
+				sum-=discount;			
+			}		
+			$('#cart-disco').text(discount.toFixed(2));  
+			$('#total').text(sum.toFixed(2)); 
+		}
+		$(document).ready(function(){
+			calc_total();
+		});
 	</script>
 	{% endblock content %}

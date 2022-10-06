@@ -20,12 +20,13 @@
 				<th>
 					Sl.No
 				</th>
+				<th>&nbsp;</th>
 				<th>Product</th>
 				<th>Price</th>
 				<th>Quantity</th>
 				<th>Discount</th>
-				<th>Total</th>
-				<th>Discount Total</th>
+				<th style='width:20%;'>Total</th>
+				<th style='width:20%;'>Discount Total</th>
 				{% if order.status == 'Delivered' %}
 
 				<th>Action</th>
@@ -39,8 +40,10 @@
 
 				<td class="product-name">
 					{{ forloop.counter }}
-				</td><img src="{{item.product.image1.url}}" class="img">
-
+				</td>
+				<td  class="image-prod">
+					<img src="{{x.product.image1.url}}" class="img">
+				</td>
 				<td class="product-name">
 					<h3> {{x.product.product_name}}</h3>
 
@@ -52,14 +55,14 @@
 					<h3>{{x.quantity}}</h3>
 				</td>
 				<td class="product-name">
-					<h3>0.00</h3>
+					<h3>{{x.discount}}%</h3>
 
 				</td>
 				<td class="product-name">
 					<h3> {{ x.product_price|mul:x.quantity|floatformat:2}}</h3>
 				</td>
 				<td class="product-name">
-					<h3> {{ x.product_price|mul:x.quantity|floatformat:2}}</h3>
+					<h3> {{ x.discount_price|mul:x.quantity|floatformat:2}}</h3>
 				</td>
 				{% if order.status == 'Delivered' %}
 				<td>
@@ -73,6 +76,14 @@
 
 			<!-- END TR-->
 			{% endfor %}
+			<tr>
+				<td colspan="4"><span id="quantity"><span></td>
+				<td >
+					<span id="discount"><span>
+				</td>
+				<td ><span id="total"><span></td>
+				<td ><span id="dis_total"><span></td>
+			</tr>
 
 		</tbody>
 	</table>

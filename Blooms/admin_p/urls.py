@@ -36,6 +36,7 @@ urlpatterns = [
     
     
     path('rep_orders',views.rep_orders,name='rep_orders'),
+    path('rep_orders_yearly',views.rep_orders_yearly,name='rep_orders_yearly'),
     path('rep_products',views.rep_products,name='rep_products'),
     path('export_csv',views.export_csv,name='export_csv'),
     path('export_excel',views.export_excel,name='export_excel'),
