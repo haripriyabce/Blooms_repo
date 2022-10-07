@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.230.153.253','localhost']
+ALLOWED_HOSTS = ['13.230.153.253','localhost','127.0.0.1']
 
 
 # Application definition
@@ -149,7 +149,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 MEDIA_URL = 'ims/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 RAZORPAY_KEY_ID='rzp_test_CLJZAjlkyL5HrW'
 RAZORPAY_KEY_SECRET='QCaYdk2SVhSH9aQPbShWNmtB'
 
